@@ -94,7 +94,7 @@ async def result_by_roll(roll):
     return msg
 
 
-class Institute(commands.Cog, name=config.get_string("description")["help"]["name"]):
+class Institute(commands.Cog, name=config.get_string("description")["institute"]["name"]):
     def __init__(self, bot):
         self.bot = bot
 
