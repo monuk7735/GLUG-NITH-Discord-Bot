@@ -12,7 +12,8 @@
       "institute":{
         "name":"Institute related commands",
         "search": "Search for students",
-        "result": "Get result"
+        "result": "Get result",
+        "announcements":"Get announcements from NITH Official Website"
       },
       "cli":{
         "name":"Commands to emulate CLI",
@@ -25,5 +26,9 @@
         "name": "Help",
         "help": "Prints this msg"
       }
+  },
+  "logos":{
+    "github": "https://i.imgur.com/8ugEYEN.png",
+    "nith":"https://i.imgur.com/oscSH3x.png"
   }
 }

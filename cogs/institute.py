@@ -1,6 +1,7 @@
 import requests
 import json
 
+from bs4 import BeautifulSoup
 import discord
 from discord.ext import commands
 
@@ -8,8 +9,10 @@ import libs.config as config
 
 from libs.models import Student, Result
 from libs.command_manager import custom_check, contribute
+from libs.embed import officialEmbed
 
-url = "https://nith-app-greyhats.herokuapp.com/"
+nith_url = "https://nith.ac.in/"
+api_url = "https://nith-app-greyhats.herokuapp.com/"
 student_by_name = "student_name_search"
 student_by_roll = "student_info"
 result_using_roll = "result"
@@ -34,7 +37,7 @@ async def search_by_name(name):
         "query": name
     }
     msg = ["```"]
-    response = requests.post(url + student_by_name, data=data)
+    response = requests.post(api_url + student_by_name, data=data)
     response_json = json.loads(response.text)
 
     count = 1
@@ -78,7 +81,7 @@ async def result_by_roll(roll):
     }
 
     msg = "```"
-    response = requests.post(url + result_using_roll, data=data)
+    response = requests.post(api_url + result_using_roll, data=data)
 
     if len(response.text) == 0:
         msg += "No Results Found"
@@ -92,6 +95,34 @@ async def result_by_roll(roll):
 
     msg += "```"
     return msg
+
+"""
+Scrapes Official NITH Website to get announcements
+
+Args:
+    count: Number of announcements to get
+
+Returns:
+    msg: An Embed with all links to announcements
+"""
+
+def get_announcements(count):
+    response = requests.get(nith_url)
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    embed = officialEmbed("NITH", f"Last {count} announcements")
+    embed.set_thumbnail(url=config.get_config("info")["logo"])
+
+    for i, a in enumerate(soup.find(id="Announcements").findAll('a',{"class":"notranslate"})):
+        if i == count:
+            break
+        link = a.get('href')
+        if link.startswith('/'):
+            link = nith_url[:-1] + link
+        text = a.get_text().strip()
+        embed.add_field(name=f"{text}", value=f"[Link]({link})", inline=False)
+
+    return embed
 
 
 class Institute(commands.Cog, name=config.get_string("description")["institute"]["name"]):
@@ -113,6 +144,14 @@ class Institute(commands.Cog, name=config.get_string("description")["institute"]
         # msg = await result_by_roll(roll)
         await ctx.channel.send("```Yet to be implemented.```")
         await contribute(ctx)
+
+    @commands.command(name="announcements", description=config.get_string("description")['institute']['announcements'], usage="[Count]")
+    @custom_check()
+    async def announcements(self, ctx, count:int = 5):
+        async with ctx.channel.typing():
+            msg = get_announcements(count)
+            await ctx.channel.send(embed=msg)
+        # await contribute(ctx)
 
 
 def setup(bot):
