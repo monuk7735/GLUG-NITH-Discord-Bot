@@ -48,7 +48,7 @@ async def on_ready():
     # Sets activity message.
 
     if s_status != "":
-        await bot.change_presence(activity=discord.CustomActivity("testing", type=discord.ActivityType.custom))
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=s_status))
 
     print(f"\n# Logged in as {bot.user}", end="\n\n")
 
