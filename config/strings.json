@@ -1,0 +1,23 @@
+{
+  "status": "nith help",
+  "error": {
+    "server_not_authorised": "This server is not authorised to use this bot",
+    "no_perm": "You do not have the permission to do that.",
+    "not_sanitized": "Sorry, the characters you have entered are blacklisted"
+  },
+  "usage": {
+    "help": ""
+  },
+  "description": {
+      "institute":{
+        "search": "Search for students",
+        "result": "Get result using roll"
+      },
+      "cli":{
+        "echo":"Display a line of text",
+        "whoami":"Prints the user name",
+        "id": "Prints user and role IDs",
+        "root": "Prints the user name associated with creator of the server"
+      }
+  }
+}

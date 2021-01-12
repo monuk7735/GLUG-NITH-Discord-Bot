@@ -1,0 +1,24 @@
+{
+  "prefix": "nith ",
+  "cogs": [
+    "cogs.help",
+    "cogs.test",
+    "cogs.welcome",
+    "cogs.cli",
+    "cogs.institute"
+  ],
+  "authorised_servers":[
+    643486522003161111,
+    796363305458466848
+  ],
+  "info": {
+    "name": "NITH",
+    "logo":"https://i.imgur.com/oscSH3x.png",
+    "icon":"https://i.imgur.com/oscSH3x.png",
+    "footer": "From monuk7735 with \u2764!",
+    "url": "https://github.com/monuk7735/NITH-Discord-Bot"
+  },
+  "colors": {
+    "embed" : 0
+  }
+}
