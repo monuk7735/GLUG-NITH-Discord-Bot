@@ -7,7 +7,7 @@ from discord.ext import commands
 import libs.config as config
 
 from libs.models import Student, Result
-from libs.command_manager import check_is_activated, contribute
+from libs.command_manager import custom_check, contribute
 
 url = "https://nith-app-greyhats.herokuapp.com/"
 student_by_name = "student_name_search"
@@ -94,12 +94,12 @@ async def result_by_roll(roll):
     return msg
 
 
-class Institute(commands.Cog):  # , name="Institute Related Commands"):
+class Institute(commands.Cog, name=config.get_string("description")["help"]["name"]):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(name="search", description=config.get_string("description")['institute']['search'], usage="{Name}")
-    @check_is_activated()
+    @custom_check()
     async def search(self, ctx, *args):
         print(args)
         async with ctx.channel.typing():
@@ -108,7 +108,7 @@ class Institute(commands.Cog):  # , name="Institute Related Commands"):
                 await ctx.channel.send(msg)
 
     @commands.command(name="result", description=config.get_string("description")['institute']['result'], usage="{Roll}")
-    @check_is_activated()
+    @custom_check()
     async def result(self, ctx, roll):
         # msg = await result_by_roll(roll)
         await ctx.channel.send("```Yet to be implemented.```")

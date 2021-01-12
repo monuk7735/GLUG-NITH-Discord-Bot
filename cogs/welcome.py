@@ -4,7 +4,6 @@ import discord
 from discord.ext import commands
 
 import libs.config as config
-from libs.command_manager import check_is_activated
 
 # async def save_roles():
 
