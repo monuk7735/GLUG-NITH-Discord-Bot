@@ -14,6 +14,3 @@
 - monuk7735
   - Initial commit and creation, initial cogs and base features
 
-***Commands:***
-{required args} | [optional args]
-
