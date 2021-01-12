@@ -56,7 +56,12 @@ class Cli(commands.Cog, name="Commands to emulate CLI"):
         else:
             for user_id in args:
                 try:
-                    user = ctx.author.guild.get_member(int(user_id[3:-1]))
+                    if '<@!' in user_id:
+                        user = ctx.author.guild.get_member(int(user_id[3:-1]))
+                    elif '<@' in user_id:
+                        user = ctx.author.guild.get_member(int(user_id[2:-1]))
+                    else:
+                        user = None
                     users.append(user)
                 except ValueError:
                     users.append(None)
