@@ -5,15 +5,20 @@ from libs.embed  import officialEmbed
 from discord.ext import commands
 
 """
-
+Any and all checks common to more than one command should be performed here
 """
 
-def check_is_activated():
+def custom_check():
 
     """Decorator for any checks.
 
     Wrap around a bot command to check appropriate permission and channel context of the executed command from
     the Context object provided by the bot's event listener method, and errors out if checks do not pass.
+
+    Example Usage:
+        @commands.command...
+        @custom_check()
+        def echo...
 
     Args:
         None yet
@@ -21,25 +26,20 @@ def check_is_activated():
     Returns:
         Original method call that the method wraps around, and continues executing the command/method.
         If any checks fail, then will stop execution of the method and returns False after raising an exception.
-
-    Raises:
-        MissingRequiredArgument: If not used properly and args[1] is not a ctx variable.
-        PrivateMessageOnly: Command is invoked in a public channel while arg dm_flag is True.
-        CommandInvokeError: Command is not invoked in the whitelist of arg channels.
-        MissingAnyRole: Context.author does not have a role in the whitelist of arg roles.
     """
 
     def guild_check(cmd):
 
         @functools.wraps(cmd)
         async def wrapper(*args, **kwargs):
-            ctx = args[1]
-            if type(ctx) is not commands.Context:
-                print("ERROR: Missing ctx variable in @check() call in", cmd.__name__, " command!")
-                raise commands.MissingRequiredArgument(ctx)
-            if ctx.author.guild.id not in config.get_config("authorised_servers"):
-                await ctx.channel.send(config.get_string("error")["server_not_authorised"])
-                return False
+            # ctx = args[1]
+            # if type(ctx) is not commands.Context:
+            #     print("ERROR: Missing ctx variable in @check() call in", cmd.__name__, " command!")
+            #     raise commands.MissingRequiredArgument(ctx)
+            # if ctx.author.guild.id not in config.get_config("authorised_servers"):
+            #     await ctx.channel.send(config.get_string("error")["server_not_authorised"])
+            #     return False
+
 
             return await cmd(*args, **kwargs)
 

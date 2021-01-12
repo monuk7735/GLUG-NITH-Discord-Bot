@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 import libs.config as config
-from libs.command_manager import check_is_activated
+from libs.command_manager import custom_check
 
 """
 Args:
@@ -33,22 +33,22 @@ def get_user_ids(users, args):
     return msg
 
 
-class Cli(commands.Cog, name="Commands to emulate CLI"):
+class Cli(commands.Cog, name=config.get_string("description")["cli"]["name"]):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(name="echo", description=config.get_string("description")['cli']['echo'], usage="[string]")
-    @check_is_activated()
+    @custom_check()
     async def echo(self, ctx, *args):
-        await ctx.channel.send(f'```{" ".join(args)} ```')
+        await ctx.channel.send(f'```\n{" ".join(args)} \n```')
 
     @commands.command(name="whoami", description=config.get_string("description")['cli']['whoami'])
-    @check_is_activated()
+    @custom_check()
     async def whoami(self, ctx):
-        await ctx.channel.send(f"```{ctx.author.name}```")
+        await ctx.channel.send(f"```\n{ctx.author.name}\n```")
 
     @commands.command(name="id", description=config.get_string("description")['cli']['id'], usage="[@mention]")
-    @check_is_activated()
+    @custom_check()
     async def id(self, ctx, *args):
         users: list = []
         if len(args) == 0:
@@ -71,9 +71,9 @@ class Cli(commands.Cog, name="Commands to emulate CLI"):
         await ctx.channel.send(msg)
 
     @commands.command(name="root", description=config.get_string("description")['cli']['root'])
-    @check_is_activated()
+    @custom_check()
     async def owner(self, ctx):
-        await ctx.channel.send(f"This server was created by {ctx.author.guild.owner.name}")
+        await ctx.channel.send(f"```\nThis server was created by {ctx.author.guild.owner.name}\n```")
 
 
 def setup(bot):

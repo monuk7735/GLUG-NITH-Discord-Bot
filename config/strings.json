@@ -10,14 +10,20 @@
   },
   "description": {
       "institute":{
+        "name":"Institute related commands",
         "search": "Search for students",
-        "result": "Get result using roll"
+        "result": "Get result"
       },
       "cli":{
-        "echo":"Display a line of text",
+        "name":"Commands to emulate CLI",
+        "echo":"Print a line of text",
         "whoami":"Prints the user name",
         "id": "Prints user and role IDs",
         "root": "Prints the user name associated with creator of the server"
+      },
+      "help":{
+        "name": "Help",
+        "help": "Prints this msg"
       }
   }
 }

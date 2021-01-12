@@ -1,6 +1,6 @@
 import discord
 import libs.config as config
-from libs.command_manager import check_is_activated
+from libs.command_manager import custom_check
 from discord.ext import commands
 
 def get_msg(bot):
@@ -30,6 +30,8 @@ def get_msg(bot):
         # Loop through all commands present in cog.
         commands = bot.get_cog(cog_name).get_commands()
         for command in commands:
+            if command.hidden:
+                continue
             i = i+1
             name = command.name
 
@@ -56,7 +58,7 @@ def get_msg(bot):
 # COG Body #
 ############
 
-class Help(commands.Cog):
+class Help(commands.Cog, name=config.get_string("description")["help"]["name"]):
     def __init__(self, bot):
         self.bot = bot
 
@@ -65,7 +67,7 @@ class Help(commands.Cog):
     #     await ctx.send(get_msg(self.bot, True))
 
     @commands.command(name="help", description="Prints help msg")
-    @check_is_activated()
+    @custom_check()
     async def help_user(self, ctx, *args):
         await ctx.send(get_msg(self.bot))
 

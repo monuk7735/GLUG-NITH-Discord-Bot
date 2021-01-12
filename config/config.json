@@ -7,10 +7,6 @@
     "cogs.cli",
     "cogs.institute"
   ],
-  "authorised_servers":[
-    643486522003161111,
-    796363305458466848
-  ],
   "info": {
     "name": "NITH",
     "logo":"https://i.imgur.com/oscSH3x.png",
