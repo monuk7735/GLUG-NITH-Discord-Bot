@@ -59,5 +59,5 @@ Returns:
 
 async def contribute(ctx):
     embed = officialEmbed("Contribute", "Contribute to this project, help create more cool features", url=config.get_config("info")["url"])
-    embed.set_thumbnail(url=config.get_config("info")["logo"])
+    embed.set_thumbnail(url=config.get_string("logos")["github"])
     await ctx.send(embed=embed)

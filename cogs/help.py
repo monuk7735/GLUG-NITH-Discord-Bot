@@ -9,13 +9,13 @@ def get_msg(bot):
 
     msg = f"```markdown\n"
                                                                  
-    msg += f"{' '*5}_|      _|  _|_|_|  _|_|_|_|_|  _|    _| \n"
-    msg += f"{' '*5}_|_|    _|    _|        _|      _|    _| \n"
-    msg += f"{' '*5}_|  _|  _|    _|        _|      _|_|_|_| \n"
-    msg += f"{' '*5}_|    _|_|    _|        _|      _|    _| \n"
-    msg += f"{' '*5}_|      _|  _|_|_|      _|      _|    _| \n"
+    msg += f"{' '*6}_|      _|  _|_|_|  _|_|_|_|_|  _|    _| \n"
+    msg += f"{' '*6}_|_|    _|    _|        _|      _|    _| \n"
+    msg += f"{' '*6}_|  _|  _|    _|        _|      _|_|_|_| \n"
+    msg += f"{' '*6}_|    _|_|    _|        _|      _|    _| \n"
+    msg += f"{' '*6}_|      _|  _|_|_|      _|      _|    _| \n"
  
-    msg += "\n        {required args} | [optional args]\n"
+    msg += "\n         {required args} [optional args]\n"
     msg += "\n"
 
     # msg = f"```markdown\n"
@@ -39,7 +39,7 @@ def get_msg(bot):
             if not command.usage == None:
                 name +=  f" {command.usage}"
             
-            cog += f"{name:20s}"
+            cog += f"{name:22s}"
 
             if not command.description == "":
                 cog +=  f" | {command.description}"
