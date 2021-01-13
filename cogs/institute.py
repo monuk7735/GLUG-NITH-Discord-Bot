@@ -1,17 +1,18 @@
 import requests
 import json
 import urllib.parse
+import os
 
 from bs4 import BeautifulSoup
 import discord
 from discord.ext import commands
 
 import libs.config as config
-
 from libs.models import Student, Result
 from libs.command_manager import custom_check, contribute
 from libs.embed import officialEmbed
 
+api_key = os.getenv("API_KEY")
 nith_url = "https://nith.ac.in/"
 api_url = "https://nith-app-greyhats.herokuapp.com/"
 r_api_url = "https://nithp.herokuapp.com/api/result/"
@@ -37,7 +38,8 @@ Returns:
 
 async def search_by_name(name):
     data = {
-        "query": name
+        "query": name,
+        "api_key" : api_key
     }
     msg = ["```"]
     response = requests.post(api_url + student_by_name, data=data)
@@ -81,7 +83,8 @@ Returns:
 
 async def result_by_roll(roll, *args):
     # data = {
-    #     "rollno": roll.lower()
+    #     "rollno": roll.lower(),
+    #     "api_key" : api_key
     # }
 
 
