@@ -8,7 +8,7 @@ from discord.ext.commands import CommandNotFound, MissingRequiredArgument
 
 import libs.config as config
 
-command_prefix = config.get_config("prefix")
+command_prefixes = config.get_config("prefix")
 
 c_extensions = config.get_config("cogs")
 # c_disabled_extensions = config.get_config("disabled_cogs")
@@ -22,7 +22,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.guilds = True
 
-bot = commands.Bot(command_prefix=command_prefix, intents=intents)
+bot = commands.Bot(command_prefix=command_prefixes, intents=intents, case_insensitive=True)
 
 # Loading the cogs.
 if __name__ == "__main__":

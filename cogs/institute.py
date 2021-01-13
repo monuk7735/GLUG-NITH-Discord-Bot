@@ -1,5 +1,6 @@
 import requests
 import json
+import urllib.parse
 
 from bs4 import BeautifulSoup
 import discord
@@ -13,6 +14,8 @@ from libs.embed import officialEmbed
 
 nith_url = "https://nith.ac.in/"
 api_url = "https://nith-app-greyhats.herokuapp.com/"
+r_api_url = "https://nithp.herokuapp.com/api/result/"
+r_result_using_roll = "student/"
 student_by_name = "student_name_search"
 student_by_roll = "student_info"
 result_using_roll = "result"
@@ -43,7 +46,7 @@ async def search_by_name(name):
     count = 1
 
     if len(response_json) == 0:
-        msg[count-1] += "No Results Found"
+        msg[count-1] += "\nNo Results Found\n"
         msg[count-1] += "```"
         return msg
 
@@ -68,33 +71,57 @@ Also if result is longer tha 2000 characters (Discord Single Msg Limit), It Spli
 
 Args:
     roll: Roll number to get result for
+    *   : Sem number
 
 Returns: 
-    String Result in ``` ``` blocks
+    result_list: If found then list contains student information and result, else an error msg. In either case, needs to be sent to the user.
 
 """
 
 
-async def result_by_roll(roll):
-    data = {
-        "rollno": roll.lower()
-    }
+async def result_by_roll(roll, *args):
+    # data = {
+    #     "rollno": roll.lower()
+    # }
 
-    msg = "```"
-    response = requests.post(api_url + result_using_roll, data=data)
 
-    if len(response.text) == 0:
-        msg += "No Results Found"
-        msg += "```"
-        return msg
+    # msg = "```"
+    # response = requests.post(api_url + result_using_roll, data=data)
+
+    response = requests.get(f"{r_api_url}{r_result_using_roll}{roll}")
+
+    # if len(response.text) == 0:
+    #     msg += "No Results Found"
+    #     msg += "```"
+    #     return msg
 
     response_json = json.loads(response.text)
 
-    result = Result(response_json)
-    msg += str(result)
+    if "status" in response_json:
+        return["```\nNo results found\n```"]
 
-    msg += "```"
-    return msg
+    result = Result(response_json)
+
+    result_list = result.parse()
+
+    if len(args) == 0:
+        return [result_list[0]+result_list[-1]]
+    else:
+        try:
+            sem = int(args[0])
+        except ValueError:
+            return["```\nInvalid Sem\n```"]
+
+    if sem < 0 or sem > len(result_list[1:]):
+        return["```\nInvalid Sem\n```"]
+    
+    if sem == 0:
+        return result_list
+
+    return [result_list[0] + result_list[sem]]
+    
+        
+
 
 """
 Scrapes Official NITH Website to get announcements
@@ -106,6 +133,7 @@ Returns:
     msg: An Embed with all links to announcements
 """
 
+
 def get_announcements(count):
     response = requests.get(nith_url)
 
@@ -113,12 +141,12 @@ def get_announcements(count):
     embed = officialEmbed("NITH", f"Last {count} announcements")
     embed.set_thumbnail(url=config.get_config("info")["logo"])
 
-    for i, a in enumerate(soup.find(id="Announcements").findAll('a',{"class":"notranslate"})):
+    for i, a in enumerate(soup.find(id="Announcements").findAll('a', {"class": "notranslate"})):
         if i == count:
             break
         link = a.get('href')
         if link.startswith('/'):
-            link = nith_url[:-1] + link
+            link = nith_url[:-1] + urllib.parse.quote(link)
         text = a.get_text().strip()
         embed.add_field(name=f"{text}", value=f"[Link]({link})", inline=False)
 
@@ -132,26 +160,25 @@ class Institute(commands.Cog, name=config.get_string("description")["institute"]
     @commands.command(name="search", description=config.get_string("description")['institute']['search'], usage="{Name}")
     @custom_check()
     async def search(self, ctx, *args):
-        print(args)
         async with ctx.channel.typing():
             messages = await search_by_name(" ".join(args))
             for msg in messages:
                 await ctx.channel.send(msg)
 
-    @commands.command(name="result", description=config.get_string("description")['institute']['result'], usage="{Roll}")
+    @commands.command(name="result", description=config.get_string("description")['institute']['result'], usage="{Roll} [Sem]")
     @custom_check()
-    async def result(self, ctx, roll):
-        # msg = await result_by_roll(roll)
-        await ctx.channel.send("```Yet to be implemented.```")
-        await contribute(ctx)
+    async def result(self, ctx, roll, *args):
+        async with ctx.channel.typing():
+            results = await result_by_roll(roll, *args)
+            for msg in results:
+                await ctx.channel.send(msg)
 
     @commands.command(name="announcements", description=config.get_string("description")['institute']['announcements'], usage="[Count]")
     @custom_check()
-    async def announcements(self, ctx, count:int = 5):
+    async def announcements(self, ctx, count: int = 5):
         async with ctx.channel.typing():
             msg = get_announcements(count)
             await ctx.channel.send(embed=msg)
-        # await contribute(ctx)
 
 
 def setup(bot):

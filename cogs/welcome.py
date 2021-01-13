@@ -16,7 +16,7 @@ class Welcome(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
         dm_channel = await member.create_dm()
-        await dm_channel.send(f"Hi {member.mention}!\n\nWelcome to {member.guild.name}!")
+        # await dm_channel.send(f"Hi {member.mention}!\n\nWelcome to {member.guild.name}!")
         # await dm_channel.send(f"```command prefix is nith\nreply with 'nith help' to know more ```")
 
 
