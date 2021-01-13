@@ -31,16 +31,13 @@ def custom_check():
 
         @functools.wraps(cmd)
         async def wrapper(*args, **kwargs):
-            ctx = args[1]
+            # ctx = args[1]
             # if type(ctx) is not commands.Context:
             #     print("ERROR: Missing ctx variable in @check() call in", cmd.__name__, " command!")
             #     raise commands.MissingRequiredArgument(ctx)
             # if ctx.author.guild.id not in config.get_config("authorised_servers"):
             #     await ctx.channel.send(config.get_string("error")["server_not_authorised"])
             #     return False
-
-            if ctx.author.name != "monuk7735":
-                return False
 
 
             return await cmd(*args, **kwargs)
