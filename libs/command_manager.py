@@ -1,8 +1,7 @@
 import functools
 
-import libs.config as config
+# import libs.config as config
 from libs.embed  import officialEmbed
-from discord.ext import commands
 
 """
 Any and all checks common to more than one command should be performed here

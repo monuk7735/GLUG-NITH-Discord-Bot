@@ -1,8 +1,7 @@
 {
-  "prefix": "nith ",
+  "prefix": ["nith ", "Nith ", "NITH "],
   "cogs": [
     "cogs.help",
-    "cogs.test",
     "cogs.welcome",
     "cogs.cli",
     "cogs.institute"

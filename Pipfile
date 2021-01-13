@@ -9,6 +9,7 @@ verify_ssl = true
 discord = "*"
 requests = "*"
 bs4 = "*"
+prettytable = "*"
 
 [requires]
 python_version = "3.9"

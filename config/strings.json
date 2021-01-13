@@ -18,9 +18,9 @@
       "cli":{
         "name":"Commands to emulate CLI",
         "echo":"Print a line of text",
-        "whoami":"Prints the user name",
+        "whoami":"Prints the username",
         "id": "Prints user and role IDs",
-        "root": "Prints the user name associated with creator of the server"
+        "root": "Prints the username of creator of the server"
       },
       "help":{
         "name": "Help",
