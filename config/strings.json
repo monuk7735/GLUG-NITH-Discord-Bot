@@ -1,5 +1,5 @@
 {
-  "status": "nith help",
+  "status": "glug help",
   "error": {
     "server_not_authorised": "This server is not authorised to use this bot",
     "no_perm": "You do not have the permission to do that.",
@@ -25,6 +25,10 @@
       "help":{
         "name": "Help",
         "help": "Prints this msg"
+      },
+      "role_manager":{
+        "name": "Role Management",
+        "opt": "Opt in or out of an optional role"
       }
   },
   "logos":{

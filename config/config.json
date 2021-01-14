@@ -1,19 +1,77 @@
 {
-  "prefix": ["nith ", "Nith ", "NITH "],
+  "prefix": ["glug ", "Glug ", "GLUG "],
   "cogs": [
     "cogs.help",
     "cogs.welcome",
     "cogs.cli",
-    "cogs.institute"
+    "cogs.institute",
+    "cogs.role_management"
   ],
   "info": {
-    "name": "NITH",
-    "logo":"https://i.imgur.com/oscSH3x.png",
-    "icon":"https://i.imgur.com/oscSH3x.png",
-    "footer": "From monuk7735 with \u2764!",
+    "name": "GLUG",
+    "logo": "https://i.imgur.com/oscSH3x.png",
+    "icon": "https://i.imgur.com/oscSH3x.png",
+    "footer": "From GLUG_NITH with \u2764!",
     "url": "https://github.com/monuk7735/NITH-Discord-Bot"
   },
   "colors": {
-    "embed" : 0
+    "embed": 0
+  },
+  "roles": {
+    "all": {
+      "admins": 537987659205967873,
+      "Moderator": 538029591340515328,
+      "Bots": 538055393306214430,
+      "Rythm": 538965317477728256,
+      "Rythm 2": 538970460340355082,
+      "MathBot": 538973375830294529,
+      "Dank Memer": 795638131646529557,
+      "NITH": 798846052026286081,
+      "Contributor": 797534707847790643,
+      "web_dev": 799225013793718302,
+      "app_dev": 799226102080995329,
+      "CP": 799226571184537611,
+      "ML/DL": 799226964468301844,
+      "linux_tools": 799227307960696842,
+      "dev": 799228480415858688
+    },
+    "optional": [
+      799225013793718302,
+      799226102080995329,
+      799226571184537611,
+      799226964468301844,
+      799227307960696842,
+      799228480415858688
+    ],
+    "moderators": [537987659205967873, 538029591340515328]
+  },
+  "channels": {
+    "competitive-programming": 536968722519293952,
+    "Server information": 538036117182873601,
+    "welcomes": 538036685858930689,
+    "other-topic": 538037858993438720,
+    "announcements": 538037958142459945,
+    "open-source": 538038231858675730,
+    "MAIN": 538974214078726144,
+    "MISC": 538974391099326484,
+    "bot-testing": 538975945550462979,
+    "spam-all-u-want": 538976160088981506,
+    "funny-stuff": 538976522510270474,
+    "anime": 538976624268541956,
+    "games": 538976879768502272,
+    "linux-help": 538977473401192452,
+    "server-announcements": 538977838200520714,
+    "rules": 538984910510096409,
+    "android-development": 539648154086408242,
+    "web-development": 540457043061112843,
+    "moderators-only": 600197132103712788,
+    "chit-chat": 625673345098317839,
+    "Voice channels": 794238479949103115,
+    "Music": 794238654737547295,
+    "General": 794238743653122058,
+    "glug-tech-news": 795265661961240596,
+    "event-preparation": 799215328777076757,
+    "i-can-help-with": 799231701536210964,
+    "glug-bot-test": 799296602433912892
   }
 }

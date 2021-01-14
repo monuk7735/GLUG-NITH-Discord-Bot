@@ -53,11 +53,6 @@ def get_msg(bot):
     msg += "```"
     return msg
 
-
-############
-# COG Body #
-############
-
 class Help(commands.Cog, name=config.get_string("description")["help"]["name"]):
     def __init__(self, bot):
         self.bot = bot
