@@ -45,12 +45,15 @@ if __name__ == "__main__":
 # Logging the starting of the bot into the console.
 @bot.event
 async def on_ready():
-    # Sets activity message.
 
+    # Sets activity message.
     if s_status != "":
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=s_status))
 
     print(f"\n# Logged in as {bot.user}", end="\n\n")
+
+    # for role in await bot.guilds[0].fetch_channels():
+    #     print(role.name, role.id)
 
 
 # Removes the "command not found" error from the console.

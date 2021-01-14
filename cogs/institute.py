@@ -39,7 +39,7 @@ Returns:
 async def search_by_name(name):
     data = {
         "query": name,
-        "api_key" : api_key
+        "api_key": api_key
     }
     msg = ["```"]
     response = requests.post(api_url + student_by_name, data=data)
@@ -87,7 +87,6 @@ async def result_by_roll(roll, *args):
     #     "api_key" : api_key
     # }
 
-
     # msg = "```"
     # response = requests.post(api_url + result_using_roll, data=data)
 
@@ -117,13 +116,11 @@ async def result_by_roll(roll, *args):
 
     if sem < 0 or sem > len(result_list[1:]):
         return["```\nInvalid Sem\n```"]
-    
+
     if sem == 0:
         return result_list
 
     return [result_list[0] + result_list[sem]]
-    
-        
 
 
 """
@@ -160,13 +157,20 @@ class Institute(commands.Cog, name=config.get_string("description")["institute"]
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="search", description=config.get_string("description")['institute']['search'], usage="{Name}")
+    @commands.command(name="search", description=config.get_string("description")['institute']['search'], usage="{Name}", pass_context=True)
     @custom_check()
     async def search(self, ctx, *args):
         async with ctx.channel.typing():
             messages = await search_by_name(" ".join(args))
             for msg in messages:
                 await ctx.channel.send(msg)
+
+    # @search.command(name="student", pass_context=True, description="sdfsd", usage="sdffsdf")
+    # async def student_search(self, ctx, *args):
+    #     async with ctx.channel.typing():
+    #         messages = await search_by_name(" ".join(args))
+    #         for msg in messages:
+    #             await ctx.channel.send(msg)
 
     @commands.command(name="result", description=config.get_string("description")['institute']['result'], usage="{Roll} [Sem]")
     @custom_check()
