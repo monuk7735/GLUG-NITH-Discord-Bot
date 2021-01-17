@@ -1,5 +1,5 @@
 
-# <p align="center" style="font-weight: bold;">NITH Discord Bot</p>
+# <p align="center" style="font-weight: bold;">GLUG-NITH Discord Bot</p>
 
 **Source:** Created by monuk7735
 
@@ -14,18 +14,25 @@
 
 ***Commands***
 
-```markdown
-> Help
-help                   | Prints help msg
-
-> Commands to emulate CLI
-echo [string]          | Print a line of text
-whoami                 | Prints the user name
-id [@mention]          | Prints user and role IDs
-root                   | Prints the user name associated with creator of the server
-
-> Institute related commands
-search {Name}          | Search for students
-result {Roll}          | Get result
-announcements [Count]  | Get announcements from NITH Official Website
+```text
+glug
+ │
+ ├── Help
+ │   └── help                │ Prints this msg
+ │   
+ ├── Commands to emulate CLI
+ │   ├── echo {String}       │ Print a String
+ │   ├── id [@Mention]       │ User and role IDs
+ │   └── root                │ Owner of the Server
+ │   
+ ├── Institute related commands
+ │   ├── search {Name}       │ Search for students
+ │   ├── result {Roll} [Sem] │ Get result
+ │   └── announcements [Num] │ NITH Announcements
+ │   
+ └── Role Management
+     └── opt                
+         ├── list            │ List optional roles
+         ├── in {Roles}      │ Opt into a role
+         └── out {Roles}     │ Opt of a role   
 ```

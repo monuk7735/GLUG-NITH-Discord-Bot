@@ -9,10 +9,8 @@ These are likely to get modified or added stuff to it, check them regularly.
 ### Pull Requests
 
 - Try one commit per implementation.
-- Any spelling mistakes will lead to immediate rejection of pull requests.
+- Avoid spelling mistakes that might lead to immediate rejection of pull requests.
 - A code that does not compile or crashes is a code that does not get merged.
-- If a PR is refused it will most likely have a justification in the comments, though it is not obligatory.
-- Use tags and labels.
 
 ## Code formatting and structure
 
