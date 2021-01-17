@@ -5,34 +5,88 @@
     "no_perm": "You do not have the permission to do that.",
     "not_sanitized": "Sorry, the characters you have entered are blacklisted"
   },
-  "usage": {
-    "help": ""
-  },
-  "description": {
-      "institute":{
-        "name":"Institute related commands",
-        "search": "Search for students",
-        "result": "Get result",
-        "announcements":"Get announcements from NITH Official Website"
+  "rules":[
+  ],
+  "commands": {
+    "institute": {
+      "name": "Institute related commands",
+      "search": {
+        "description": "Search for students",
+        "usage": "{Name}"
       },
-      "cli":{
-        "name":"Commands to emulate CLI",
-        "echo":"Print a line of text",
-        "whoami":"Prints the username",
-        "id": "Prints user and role IDs",
-        "root": "Prints the username of creator of the server"
+      "result": {
+        "description": "Get result",
+        "usage": "{Roll} [Sem]"
       },
-      "help":{
-        "name": "Help",
-        "help": "Prints this msg"
-      },
-      "role_manager":{
-        "name": "Role Management",
-        "opt": "Opt in or out of an optional role"
+      "announcements": {
+        "description": "NITH Announcements",
+        "usage": "[Num]"
       }
+    },
+    "cli": {
+      "name": "Commands to emulate CLI",
+      "echo": {
+        "description": "Print a String",
+        "usage": "{String}"
+      },
+      "id": {
+        "description": "User and role IDs",
+        "usage": "[@Mention]"
+      },
+      "root": {
+        "description": "Owner of the Server"
+      }
+    },
+    "help": {
+      "name": "Help",
+      "help": {
+        "description": "Prints this msg"
+      }
+    },
+    "role_manager": {
+      "name": "Role Management",
+      "opt": {
+        "description": "Optional roles",
+        "in": {
+          "description": "Opt into a role",
+          "usage": "{Roles}"
+        },
+        "out": {
+          "description": "Opt of a role",
+          "usage": "{Roles}"
+        },
+        "list": {
+          "description": "List optional roles"
+        }
+      }
+    }
   },
-  "logos":{
+  "welcome": [
+    "Hey {} Welcome to the server.",
+    "{} just showed up!",
+    "{} hopped into the server.",
+    "Glad you're here, {}.",
+    "Yay you made it, {}!",
+    "{} joined the party.",
+    "Welcome {}. Say hi!",
+    "Everyone welcome {}!",
+    "Good to see you, {}.",
+    "{} just joined. Everyone, look busy!",
+    "Ermagherd. {} is here.",
+    "A wild {} appeared.",
+    "Swoooosh. {} just landed.",
+    "Brace yourselves. {} just joined the server.",
+    "{} hopped into the server. Kangaroo!!",
+    "Hey! Listen! {} has joined!",
+    "{} just slid into the server.",
+    "Where’s {}? In the server!",
+    "It's a bird! It's a plane! Nevermind, it's just {}.",
+    "We've been expecting you {}",
+    "{} is here, as the prophecy foretold.",
+    "Hello. Is it {} you're looking for?"
+  ],
+  "logos": {
     "github": "https://i.imgur.com/8ugEYEN.png",
-    "nith":"https://i.imgur.com/oscSH3x.png"
+    "nith": "https://i.imgur.com/oscSH3x.png"
   }
 }

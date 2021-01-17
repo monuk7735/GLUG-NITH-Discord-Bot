@@ -3,57 +3,119 @@ import libs.config as config
 from libs.command_manager import custom_check
 from discord.ext import commands
 
+help_config = config.get_string("commands")["help"]
+
+def extract_commands(all_commands, margin="", getcount=False):
+    padding = 24 - len(margin)
+    count = 0
+    for command in all_commands:
+        if command.hidden:
+            continue
+        if isinstance(command,commands.core.Group):
+            _count = extract_commands(command.commands,margin=margin+"│    ", getcount=True)
+            if _count > 0:
+                count += 1
+        else:
+            count += 1
+
+    if getcount:
+        return count
+
+    i = 0
+    msg = ""
+    for command in all_commands:
+        if command.hidden:
+            continue
+        if isinstance(command,commands.core.Group):
+
+            if i == count - 1:
+                status, message = extract_commands(command.commands,margin=margin+"    ")
+            else:
+                status, message = extract_commands(command.commands,margin=margin+"│   ")
+            if status:
+                i += 1
+                msg = margin
+                if i == count:
+                    msg += "└── "
+                else:
+                    msg += "├── "
+                tmp = command.name
+                if command.usage:
+                    tmp += f" {command.usage}"
+                msg += f"{tmp:{padding}s}"
+                if command.description:
+                    msg += f" │ {command.description}"
+                msg += "\n"
+
+                msg += f"{message}\n"
+        else:
+            i += 1
+            msg += margin
+            if i == count:
+                msg += "└── "
+            else:
+                msg += "├── "
+            tmp = command.name
+            if command.usage:
+                tmp += f" {command.usage}"
+            msg += f"{tmp:{padding}s}"
+            if command.description:
+                msg += f" │ {command.description}"
+            msg += "\n"
+            # msg += f"{command.name} {command.usage} | {command.description}\n"
+
+
+    msg += f"{margin}"
+    if i > 0:
+        return (True,msg)
+    return (False, "")
+
 def get_msg(bot):
+    count = 0
+    for cog_name in bot.cogs:
+        cog = f"\n> {cog_name}\n"
+        all_commands = bot.get_cog(cog_name).get_commands()
+        
+        _count = extract_commands(all_commands, " │   ", getcount=True)
+        if _count > 0:
+            count += 1
 
-    """Fabricates the output message by loading COGs and commands informations."""
-
-    msg = f"```markdown\n"
-                                                                 
-    msg += f"{' '*6}_|      _|  _|_|_|  _|_|_|_|_|  _|    _| \n"
-    msg += f"{' '*6}_|_|    _|    _|        _|      _|    _| \n"
-    msg += f"{' '*6}_|  _|  _|    _|        _|      _|_|_|_| \n"
-    msg += f"{' '*6}_|    _|_|    _|        _|      _|    _| \n"
-    msg += f"{' '*6}_|      _|  _|_|_|      _|      _|    _| \n"
+    msg = f"```\n"
+    msg += f"{' '*6}   _|_|_|  _|        _|    _|    _|_|_| \n"
+    msg += f"{' '*6} _|        _|        _|    _|  _|       \n"
+    msg += f"{' '*6} _|  _|_|  _|        _|    _|  _|  _|_| \n"
+    msg += f"{' '*6} _|    _|  _|        _|    _|  _|    _| \n"
+    msg += f"{' '*6}   _|_|_|  _|_|_|_|    _|_|      _|_|_| \n" 
  
-    msg += "\n         {required args} [optional args]\n"
     msg += "\n"
+    msg += "          {required args} [optional args]\n"
+    msg += "\n"
+    msg += "\n"
+    msg += "glug\n"
+    msg += " │\n"
 
-    # msg = f"```markdown\n"
-
-    # Loops through cogs.
+    i = 0
     for cog_name in bot.cogs:
         cog = f"\n> {cog_name}\n"
 
-        # Command number
-        i = 0
-
         # Loop through all commands present in cog.
-        commands = bot.get_cog(cog_name).get_commands()
-        for command in commands:
-            if command.hidden:
-                continue
-            i = i+1
-            name = command.name
-
-            # Display only stuff that exists.
-            if not command.usage == None:
-                name +=  f" {command.usage}"
-            
-            cog += f"{name:22s}"
-
-            if not command.description == "":
-                cog +=  f" | {command.description}"
-                
-            cog += "\n"
-
-        # If all commands in cog are hidden, don't print its name.
-        if i > 0:
-            msg += cog
-
+        all_commands = bot.get_cog(cog_name).get_commands()
+        
+        if i == count -1:
+            status, message = extract_commands(all_commands, margin="     ")
+        else:
+            status, message = extract_commands(all_commands, margin=" │   ")
+        if status:
+            i += 1
+            if i == count:
+                msg += " └── "+cog_name + "\n"
+            else:
+                msg += " ├── "+cog_name + "\n"
+            msg += message + "\n"
     msg += "```"
     return msg
 
-class Help(commands.Cog, name=config.get_string("description")["help"]["name"]):
+class Help(commands.Cog, name=help_config["name"]):
     def __init__(self, bot):
         self.bot = bot
 
@@ -61,7 +123,7 @@ class Help(commands.Cog, name=config.get_string("description")["help"]["name"]):
     # async def help_staff(self, ctx):
     #     await ctx.send(get_msg(self.bot, True))
 
-    @commands.command(name="help", description="Prints help msg")
+    @commands.command(name="help", description=help_config["help"]["description"])
     @custom_check()
     async def help_user(self, ctx, *args):
         await ctx.send(get_msg(self.bot))

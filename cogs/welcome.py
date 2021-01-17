@@ -1,12 +1,14 @@
 import time
+import random
 
 import discord
 from discord.ext import commands
 
 import libs.config as config
 
-# async def save_roles():
-
+welcome_channel_id = config.get_config("channels")["welcomes"]
+welcome_quotes = config.get_string("welcome")
+rules_array = config.get_string("rules")
 
 class Welcome(commands.Cog):
     def __init__(self, bot):
@@ -15,7 +17,12 @@ class Welcome(commands.Cog):
     # Welcome messages for new users
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
-        dm_channel = await member.create_dm()
+        # channel = self.bot.get_channel(welcome_channel_id)
+        msg = random.choice(welcome_quotes).format(member.mention)
+        print(msg)
+        # await channel.send(msg)
+
+        # dm_channel = await member.create_dm()
         # await dm_channel.send(f"Hi {member.mention}!\n\nWelcome to {member.guild.name}!")
         # await dm_channel.send(f"```command prefix is nith\nreply with 'nith help' to know more ```")
 

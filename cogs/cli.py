@@ -4,6 +4,8 @@ from discord.ext import commands
 import libs.config as config
 from libs.command_manager import custom_check
 
+cli_config = config.get_string("commands")["cli"]
+
 """
 Args:
     users: List of discord.member
@@ -33,21 +35,16 @@ def get_user_ids(users, args):
     return msg
 
 
-class Cli(commands.Cog, name=config.get_string("description")["cli"]["name"]):
+class Cli(commands.Cog, name=cli_config["name"]):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="echo", description=config.get_string("description")['cli']['echo'], usage="[string]")
+    @commands.command(name="echo", description=cli_config["echo"]["description"], usage=cli_config["echo"]["usage"])
     @custom_check()
     async def echo(self, ctx, *args):
         await ctx.channel.send(f'```\n{" ".join(args)} \n```')
 
-    @commands.command(name="whoami", description=config.get_string("description")['cli']['whoami'])
-    @custom_check()
-    async def whoami(self, ctx):
-        await ctx.channel.send(f"```\n{ctx.author.name}\n```")
-
-    @commands.command(name="id", description=config.get_string("description")['cli']['id'], usage="[@mention]")
+    @commands.command(name="id", description=cli_config["id"]["description"], usage=cli_config["id"]["usage"])
     @custom_check()
     async def id(self, ctx, *args):
         users: list = []
@@ -70,7 +67,7 @@ class Cli(commands.Cog, name=config.get_string("description")["cli"]["name"]):
         
         await ctx.channel.send(msg)
 
-    @commands.command(name="root", description=config.get_string("description")['cli']['root'])
+    @commands.command(name="root", description=cli_config["root"]["description"])
     @custom_check()
     async def owner(self, ctx):
         await ctx.channel.send(f"```\nThis server was created by {ctx.author.guild.owner.name}\n```")
