@@ -11,7 +11,7 @@
     "name": "GLUG",
     "logo": "https://i.imgur.com/oscSH3x.png",
     "icon": "https://i.imgur.com/oscSH3x.png",
-    "footer": "From GLUG_NITH with \u2764!",
+    "footer": "From GLUG-NITH with \u2764!",
     "url": "https://github.com/monuk7735/NITH-Discord-Bot"
   },
   "colors": {
@@ -20,18 +20,18 @@
   "roles": {
     "all": {
       "admins": 537987659205967873,
-      "Moderator": 538029591340515328,
-      "Bots": 538055393306214430,
-      "Rythm": 538965317477728256,
-      "Rythm 2": 538970460340355082,
-      "MathBot": 538973375830294529,
-      "Dank Memer": 795638131646529557,
-      "NITH": 798846052026286081,
-      "Contributor": 797534707847790643,
+      "moderator": 538029591340515328,
+      "bots": 538055393306214430,
+      "rythm": 538965317477728256,
+      "rythm 2": 538970460340355082,
+      "mathbot": 538973375830294529,
+      "dank memer": 795638131646529557,
+      "nith": 798846052026286081,
+      "contributor": 797534707847790643,
       "web_dev": 799225013793718302,
       "app_dev": 799226102080995329,
-      "CP": 799226571184537611,
-      "ML/DL": 799226964468301844,
+      "cp": 799226571184537611,
+      "ml/dl": 799226964468301844,
       "linux_tools": 799227307960696842,
       "dev": 799228480415858688
     },

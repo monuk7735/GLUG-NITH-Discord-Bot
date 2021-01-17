@@ -12,6 +12,8 @@ from libs.models import Student, Result
 from libs.command_manager import custom_check, contribute
 from libs.embed import officialEmbed
 
+institute_config = config.get_string("commands")["institute"]
+
 api_key = os.getenv("API_KEY")
 nith_url = "https://nith.ac.in/"
 api_url = "https://nith-app-greyhats.herokuapp.com/"
@@ -153,11 +155,11 @@ def get_announcements(count):
     return embed
 
 
-class Institute(commands.Cog, name=config.get_string("description")["institute"]["name"]):
+class Institute(commands.Cog, name=institute_config["name"]):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="search", description=config.get_string("description")['institute']['search'], usage="{Name}", pass_context=True)
+    @commands.command(name="search", description=institute_config["search"]["description"], usage=institute_config["search"]["usage"], pass_context=True)
     @custom_check()
     async def search(self, ctx, *args):
         async with ctx.channel.typing():
@@ -172,7 +174,7 @@ class Institute(commands.Cog, name=config.get_string("description")["institute"]
     #         for msg in messages:
     #             await ctx.channel.send(msg)
 
-    @commands.command(name="result", description=config.get_string("description")['institute']['result'], usage="{Roll} [Sem]")
+    @commands.command(name="result", description=institute_config["result"]["description"], usage=institute_config["result"]["usage"])
     @custom_check()
     async def result(self, ctx, roll, *args):
         async with ctx.channel.typing():
@@ -180,7 +182,7 @@ class Institute(commands.Cog, name=config.get_string("description")["institute"]
             for msg in results:
                 await ctx.channel.send(msg)
 
-    @commands.command(name="announcements", description=config.get_string("description")['institute']['announcements'], usage="[Count]")
+    @commands.command(name="announcements", description=institute_config["announcements"]["description"], usage=institute_config["announcements"]["usage"])
     @custom_check()
     async def announcements(self, ctx, count: int = 5):
         async with ctx.channel.typing():
