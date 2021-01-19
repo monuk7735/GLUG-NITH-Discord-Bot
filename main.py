@@ -65,10 +65,3 @@ async def on_command_error(ctx, error):
 
 # Starting the bot.
 bot.run(os.getenv("TOKEN"))
-
-# com = bot.get_command("help")
-
-# from cogs.help import extract_commands
-
-# # print(type(com))
-# print(extract_commands([com])[1])

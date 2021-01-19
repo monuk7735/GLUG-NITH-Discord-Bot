@@ -25,24 +25,19 @@ Any and all checks common to more than one command should be performed here
         allowed_in_dm = Whether a command is allowed in DM or not,  defaults to True
 
     Returns:
-        Original method call that the method wraps around, and continues executing the command/method.
-        If any checks fail, then will stop execution of the method and returns False after raising an exception.
+        A Decorator to check for given conditions
     """
 
 
 def custom_check(allowed_channels=[], allowed_in_dm=True):
+
     """Decorator for any checks.
 
     Wrap around a bot command to check appropriate permission and channel context of the executed command from
     the Context object provided by the bot's event listener method, and errors out if checks do not pass.
 
-    Example Usage:
-        @commands.command...
-        @custom_check(allowed_channels= ['channel-name1'], dm_flag= True)
-        def echo...
-
     Args:
-        allowed_channels = List of allowed channels.
+        cmd: command function
 
     Returns:
         Original method call that the method wraps around, and continues executing the command/method.
@@ -85,7 +80,7 @@ Function to get Member object from user_id
 
 Args:
     ctx: The context passed to the command function
-    user_id: The mentioned role_id
+    user_id: The mentioned user_id
 
 Returns:
     member: Member if found otherwise None
