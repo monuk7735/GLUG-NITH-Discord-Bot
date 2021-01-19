@@ -62,10 +62,8 @@ def extract_commands(all_commands, margin="", getcount=False):
             if command.description:
                 msg += f" │ {command.description}"
             msg += "\n"
-            # msg += f"{command.name} {command.usage} | {command.description}\n"
-
-
-    msg += f"{margin}"
+            if i == count:
+                msg += f"{margin}"
     if i > 0:
         return (True,msg)
     return (False, "")

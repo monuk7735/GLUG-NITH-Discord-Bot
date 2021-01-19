@@ -41,11 +41,6 @@ These are likely to get modified or added stuff to it, check them regularly.
 - Any text destined to users has to go in the "strings.json" file. (see config file for path).
 - Any data that needs to be written locally goes in the appropriate folder, in a new file. (use the config file for path).
 
-### Tests
-
-- You will not have access to the official instance of the bot.
-- Feel free to recreate your discord and bot in a private server to test your code.
-
 ## Credits
 
 If you have contributed to the bot, let people know by adding your name and the features you have implemented at the bottom of the list on the README.md.

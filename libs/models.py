@@ -20,6 +20,27 @@ class Student():
 
         return msg
 
+class Faculty():
+    def __init__(self, data):
+        self.name = data['name'].title()
+        self.branch = data['branch'].title()
+        self.email = data['email']
+        self.rank = data['rank'].title()
+        self.phone = data['phone']
+        self.specialization = data['specialization']
+    
+    def __str__(self):
+        
+        msg = ""
+        msg += f"Name         : {self.name}\n"
+        msg += f"Branch       : {self.branch}\n"
+        msg += f"Designation  : {self.rank}\n"
+        msg += f"Email        : {self.email}\n"
+        msg += f"Phone        : {self.phone}\n"
+        # msg += f"Rank   : {self.rank}\n"
+
+        return msg
+
 class Result():
     def __init__(self, data):
         self.data = data

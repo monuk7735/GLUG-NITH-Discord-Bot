@@ -8,9 +8,10 @@ import discord
 from discord.ext import commands
 
 import libs.config as config
-from libs.models import Student, Result
+from libs.models import Student, Result, Faculty
 from libs.command_manager import custom_check, contribute
 from libs.embed import officialEmbed
+from cogs.help import extract_commands
 
 institute_config = config.get_string("commands")["institute"]
 
@@ -20,6 +21,7 @@ api_url = "https://nith-app-greyhats.herokuapp.com/"
 r_api_url = "https://nithp.herokuapp.com/api/result/"
 r_result_using_roll = "student/"
 student_by_name = "student_name_search"
+faculty_by_name = "faculty_name_search"
 student_by_roll = "student_info"
 result_using_roll = "result"
 
@@ -38,7 +40,7 @@ Returns:
 """
 
 
-async def search_by_name(name):
+async def search_students_by_name(name):
     data = {
         "query": name,
         "api_key": api_key
@@ -60,6 +62,53 @@ async def search_by_name(name):
             count += 1
             msg.append("```")
         msg[count-1] += "\n"+str(student)
+
+    if count > 1:
+        for i in range(count):
+            msg[i] += f"\n{i+1}/{count}```"
+    else:
+        msg[count-1] += "```"
+    return msg
+
+
+"""
+Requests api for data using name and beautifies text using ``` ``` blocks
+
+Also if result is longer tha 2000 characters (Discord Single Msg Limit), It Splits msg into parts providing part number at bottom
+
+Args:
+    name: name to search for (Can be Multiple names separated by spaces)
+
+Returns: 
+    List of ``` ``` blocks
+
+"""
+
+
+async def search_faculty_by_name(name):
+    data = {
+        "query": name,
+        "api_key": api_key
+    }
+    msg = ["```"]
+    response = requests.post(api_url + faculty_by_name, data=data)
+    response_json = json.loads(response.text)
+
+    count = 1
+
+    if len(response_json) == 0:
+        msg[count-1] += "\nNo Results Found\n"
+        msg[count-1] += "```"
+        return msg
+
+    for d in response_json:
+        if not "phone" in d:
+            continue
+        faculty = Faculty(d)
+        if len(msg[count-1]) + len(str(faculty)) > 1975:
+            count += 1
+            msg.append("```")
+        msg[count-1] += "\n"+str(faculty)
 
     if count > 1:
         for i in range(count):
@@ -159,20 +208,34 @@ class Institute(commands.Cog, name=institute_config["name"]):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="search", description=institute_config["search"]["description"], usage=institute_config["search"]["usage"], pass_context=True)
+    @commands.group(name="search", description=institute_config["search"]["description"])
     @custom_check()
-    async def search(self, ctx, *args):
+    async def search(self, ctx):
+        if ctx.invoked_subcommand:
+            return
+        msg = "```\n"
+        msg += "search\n"
+        msg += extract_commands(self.search.commands, margin=" ")[1][:-2]
+        msg += "```"
+        await ctx.channel.send(msg)
+        # async with ctx.channel.typing():
+        #     messages = await search_by_name(" ".join(args))
+        #     for msg in messages:
+        #         await ctx.channel.send(msg)
+
+    @search.command(name="student", description=institute_config["search"]["student"]["description"], usage=institute_config["search"]["student"]["usage"])
+    async def student_search(self, ctx, *args):
         async with ctx.channel.typing():
-            messages = await search_by_name(" ".join(args))
+            messages = await search_students_by_name(" ".join(args))
             for msg in messages:
                 await ctx.channel.send(msg)
-
-    # @search.command(name="student", pass_context=True, description="sdfsd", usage="sdffsdf")
-    # async def student_search(self, ctx, *args):
-    #     async with ctx.channel.typing():
-    #         messages = await search_by_name(" ".join(args))
-    #         for msg in messages:
-    #             await ctx.channel.send(msg)
+            
+    @search.command(name="faculty", description=institute_config["search"]["faculty"]["description"], usage=institute_config["search"]["faculty"]["usage"])
+    async def faculty_search(self, ctx, *args):
+        async with ctx.channel.typing():
+            messages = await search_faculty_by_name(" ".join(args))
+            for msg in messages:
+                await ctx.channel.send(msg)
 
     @commands.command(name="result", description=institute_config["result"]["description"], usage=institute_config["result"]["usage"])
     @custom_check()

@@ -5,7 +5,8 @@
     "cogs.welcome",
     "cogs.cli",
     "cogs.institute",
-    "cogs.role_management"
+    "cogs.role_management",
+    "cogs.stats"
   ],
   "info": {
     "name": "GLUG",
@@ -48,7 +49,7 @@
   "channels": {
     "competitive-programming": 536968722519293952,
     "Server information": 538036117182873601,
-    "welcomes": 538036685858930689,
+    "hello-world": 538036685858930689,
     "other-topic": 538037858993438720,
     "announcements": 538037958142459945,
     "open-source": 538038231858675730,
@@ -72,6 +73,9 @@
     "glug-tech-news": 795265661961240596,
     "event-preparation": 799215328777076757,
     "i-can-help-with": 799231701536210964,
-    "glug-bot-test": 799296602433912892
+    "glug-bot-test": 799296602433912892,
+    "stats": {
+
+    }
   }
 }

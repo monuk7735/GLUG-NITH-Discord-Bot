@@ -32,7 +32,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
 
     # Welcome messages for new users
     @commands.group(name="opt", pass_context=True)
-    @custom_check(allowed_channels=['i-can-help-with'])
+    @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
     async def opt(self, ctx):
         if ctx.invoked_subcommand:
             return
@@ -43,7 +43,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         await ctx.channel.send(msg)
 
     @opt.command(name="list", description=role_manager_config["opt"]["list"]["description"])
-    @custom_check(allowed_channels=['i-can-help-with'])
+    @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
     async def opt_list(self, ctx):
         msg = "```\n"
         for role in config.get_config("roles")["optional"]:
@@ -53,7 +53,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         await ctx.channel.send(msg)
 
     @opt.command(name="out", description=role_manager_config["opt"]["out"]["description"], usage=role_manager_config["opt"]["out"]["usage"])
-    @custom_check(allowed_channels=['i-can-help-with'])
+    @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
     async def opt_out(self, ctx, *args):
         if len(args) == 0:
             await ctx.channel.send("Need some roles to opt out of")
@@ -92,7 +92,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         await ctx.channel.send(msg)
 
     @opt.command(name="in", description=role_manager_config["opt"]["in"]["description"], usage=role_manager_config["opt"]["in"]["usage"])
-    @custom_check(allowed_channels=['i-can-help-with'])
+    @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
     async def opt_in(self, ctx, *args):
         if len(args) == 0:
             await ctx.channel.send("Need some roles to opt into")

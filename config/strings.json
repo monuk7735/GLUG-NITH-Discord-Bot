@@ -5,14 +5,20 @@
     "no_perm": "You do not have the permission to do that.",
     "not_sanitized": "Sorry, the characters you have entered are blacklisted"
   },
-  "rules":[
-  ],
+  "rules": [],
   "commands": {
     "institute": {
       "name": "Institute related commands",
       "search": {
-        "description": "Search for students",
-        "usage": "{Name}"
+        "description":"Search in NITH",
+        "student": {
+          "description": "Search for students",
+          "usage": "{Name}"
+        },
+        "faculty": {
+          "description": "Search for faculties",
+          "usage": "{Name}"
+        }
       },
       "result": {
         "description": "Get result",
@@ -58,6 +64,13 @@
         "list": {
           "description": "List optional roles"
         }
+      }
+    },
+    "stats": {
+      "name": "Stats",
+      "stats": {
+        "description": "Stats of the Server",
+        "usage": ""
       }
     }
   },

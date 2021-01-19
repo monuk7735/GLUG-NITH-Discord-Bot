@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 import libs.config as config
-from libs.command_manager import custom_check
+from libs.command_manager import custom_check, get_member
 
 cli_config = config.get_string("commands")["cli"]
 
@@ -45,30 +45,20 @@ class Cli(commands.Cog, name=cli_config["name"]):
         await ctx.channel.send(f'```\n{" ".join(args)} \n```')
 
     @commands.command(name="id", description=cli_config["id"]["description"], usage=cli_config["id"]["usage"])
-    @custom_check()
+    @custom_check(allowed_in_dm=False)
     async def id(self, ctx, *args):
         users: list = []
         if len(args) == 0:
             users = [ctx.author]
         else:
             for user_id in args:
-                try:
-                    if '<@!' in user_id:
-                        user = ctx.author.guild.get_member(int(user_id[3:-1]))
-                    elif '<@' in user_id:
-                        user = ctx.author.guild.get_member(int(user_id[2:-1]))
-                    else:
-                        user = None
-                    users.append(user)
-                except ValueError:
-                    users.append(None)
-
+                user = get_member(ctx, user_id)
         msg = get_user_ids(users, args)
         
         await ctx.channel.send(msg)
 
     @commands.command(name="root", description=cli_config["root"]["description"])
-    @custom_check()
+    @custom_check(allowed_in_dm=False)
     async def owner(self, ctx):
         await ctx.channel.send(f"```\nThis server was created by {ctx.author.guild.owner.name}\n```")
 
