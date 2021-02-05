@@ -52,6 +52,7 @@ async def on_ready():
 
     print(f"\n# Logged in as {bot.user}", end="\n\n")
 
+
 # Removes the "command not found" error from the console.
 @bot.event
 async def on_command_error(ctx, error):

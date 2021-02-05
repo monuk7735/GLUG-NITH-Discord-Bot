@@ -53,6 +53,7 @@ class Cli(commands.Cog, name=cli_config["name"]):
         else:
             for user_id in args:
                 user = get_member(ctx, user_id)
+                users.append(user)
         msg = get_user_ids(users, args)
         
         await ctx.channel.send(msg)
