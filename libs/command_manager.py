@@ -30,27 +30,15 @@ Any and all checks common to more than one command should be performed here
 
 
 def custom_check(allowed_channels=[], allowed_in_dm=True):
-
-    """Decorator for any checks.
-
-    Wrap around a bot command to check appropriate permission and channel context of the executed command from
-    the Context object provided by the bot's event listener method, and errors out if checks do not pass.
-
-    Args:
-        cmd: command function
-
-    Returns:
-        Original method call that the method wraps around, and continues executing the command/method.
-        If any checks fail, then will stop execution of the method and returns False after raising an exception.
-    """
-
+    
     def guild_check(cmd):
 
         @functools.wraps(cmd)
         async def wrapper(*args, **kwargs):
             ctx = args[1]
+            print(f"{ctx.author}({ctx.author.id}) in {ctx.channel.name}({ctx.author.guild.name}): {ctx.message.content}")
             if type(ctx) is not commands.Context:
-                print("ERROR: Missing ctx variable in @check() call in",
+                print("ERROR: Missing ctx variable in @custom_check() call in",
                       cmd.__name__, " command!")
                 raise commands.MissingRequiredArgument(ctx)
             if isinstance(ctx.channel, discord.channel.DMChannel):
