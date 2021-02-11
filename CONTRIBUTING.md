@@ -31,15 +31,14 @@ These are likely to get modified or added stuff to it, check them regularly.
 
 ### Documenting and Comments
 
-- You need to document every function that is not a command using ''' blocs.
-- Try to comment your code using comments as much as possible.
+- You need to document every function that is not a command using ''' blocks.
+- Try to explain your code using comments as much as possible.
 - A code that is not documented is a code that gets refused on review.
 
 ### Config and Data
 
 - Configs go in the "config.json" file. (see config file for path).
 - Any text destined to users has to go in the "strings.json" file. (see config file for path).
-- Any data that needs to be written locally goes in the appropriate folder, in a new file. (use the config file for path).
 
 ## Credits
 

@@ -30,13 +30,16 @@ Any and all checks common to more than one command should be performed here
 
 
 def custom_check(allowed_channels=[], allowed_in_dm=True):
-    
+
+    allowed_channels += ['glug-bot-test', 'bot-commands', 'bot-testing']
+
     def guild_check(cmd):
 
         @functools.wraps(cmd)
         async def wrapper(*args, **kwargs):
             ctx = args[1]
-            print(f"{ctx.author}({ctx.author.id}) in {ctx.channel.name}({ctx.author.guild.name}): {ctx.message.content}")
+            print(
+                f"{ctx.author}({ctx.author.id}) in {ctx.channel}: {ctx.message.content}")
             if type(ctx) is not commands.Context:
                 print("ERROR: Missing ctx variable in @custom_check() call in",
                       cmd.__name__, " command!")
@@ -46,15 +49,10 @@ def custom_check(allowed_channels=[], allowed_in_dm=True):
                     await ctx.channel.send("Command not allowed in DM")
                     return False
             else:
-                if len(allowed_channels) > 0:
-                    if not ctx.channel.name in allowed_channels + ['glug-bot-test']:
-                        print(
-                            f"Command used in {ctx.channel.name} channel while allowed channels were {str(allowed_channels)}")
-                        return False
-                else:
-                    if not ctx.channel.name in ['bot-commands', 'bot-testing', 'glug-bot-test']:
-                        print(f"Command used in {ctx.channel.name}")
-                        return False
+                if not ctx.channel.name in allowed_channels:
+                    print(
+                        f"Command used in {ctx.channel.name} channel while allowed channels were {str(allowed_channels)}")
+                    return False
 
             return await cmd(*args, **kwargs)
 

@@ -198,6 +198,7 @@ def get_announcements(count):
         link = a.get('href')
         if link.startswith('/'):
             link = nith_url[:-1] + urllib.parse.quote(link)
+        link = link.replace(" ", "%20")
         text = a.get_text().strip()
         embed.add_field(name=f"{text}", value=f"[Link]({link})", inline=False)
 
@@ -229,7 +230,7 @@ class Institute(commands.Cog, name=institute_config["name"]):
             messages = await search_students_by_name(" ".join(args))
             for msg in messages:
                 await ctx.channel.send(msg)
-            
+
     @search.command(name="faculty", description=institute_config["search"]["faculty"]["description"], usage=institute_config["search"]["faculty"]["usage"])
     async def faculty_search(self, ctx, *args):
         async with ctx.channel.typing():
