@@ -9,7 +9,7 @@ These are likely to get modified or added stuff to it, check them regularly.
 ### Pull Requests
 
 - Try one commit per implementation.
-- Avoid spelling mistakes that might lead to immediate rejection of pull requests.
+- Avoid spelling mistakes.
 - A code that does not compile or crashes is a code that does not get merged.
 
 ## Code formatting and structure

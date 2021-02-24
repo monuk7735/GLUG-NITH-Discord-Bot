@@ -58,7 +58,7 @@
           "usage": "{Roles}"
         },
         "out": {
-          "description": "Opt of a role",
+          "description": "Opt out of a role",
           "usage": "{Roles}"
         },
         "list": {

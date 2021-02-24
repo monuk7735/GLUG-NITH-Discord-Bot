@@ -11,6 +11,7 @@
 
 - monuk7735
   - Initial commit and creation, initial cogs and base features
+  - Optional Role Opting
 
 ***Commands***
 
@@ -34,5 +35,5 @@ glug
      └── opt                
          ├── list            │ List optional roles
          ├── in {Roles}      │ Opt into a role
-         └── out {Roles}     │ Opt of a role   
+         └── out {Roles}     │ Opt out of a role
 ```

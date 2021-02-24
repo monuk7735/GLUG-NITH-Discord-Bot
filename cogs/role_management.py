@@ -1,4 +1,5 @@
 import time
+import asyncio
 
 import discord
 from discord.ext import commands
@@ -26,11 +27,15 @@ def extract_roles(ctx, *args):
     return (valid_roles, invalid_role_ids)
 
 
+async def delete_message(ctx, messages):
+    await asyncio.sleep(10)
+    await ctx.channel.delete_messages(iter(messages))
+
+
 class RoleManager(commands.Cog, name=role_manager_config["name"]):
     def __init__(self, bot):
         self.bot = bot
 
-    # Welcome messages for new users
     @commands.group(name="opt", pass_context=True)
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
     async def opt(self, ctx):
@@ -50,7 +55,9 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
             role = get_role(ctx, str(role))
             msg += f"{role.name}\n"
         msg += "```"
-        await ctx.channel.send(msg)
+        sent = await ctx.channel.send(msg)
+
+        await delete_message(ctx, [ctx.message, sent])
 
     @opt.command(name="out", description=role_manager_config["opt"]["out"]["description"], usage=role_manager_config["opt"]["out"]["usage"])
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
@@ -89,7 +96,9 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         if flags[2]:
             msg += f"{error}\n\n"
         msg += "```"
-        await ctx.channel.send(msg)
+
+        sent = await ctx.channel.send(msg)
+        await delete_message(ctx, [ctx.message, sent])
 
     @opt.command(name="in", description=role_manager_config["opt"]["in"]["description"], usage=role_manager_config["opt"]["in"]["usage"])
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
@@ -126,8 +135,9 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         if flags[2]:
             msg += f"{error}\n\n"
         msg += "```"
-        await ctx.channel.send(msg)
 
+        sent = await ctx.channel.send(msg)
+        await delete_message(ctx, [ctx.message, sent])
 
 def setup(bot):
     bot.add_cog(RoleManager(bot))
