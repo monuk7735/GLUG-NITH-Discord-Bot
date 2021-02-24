@@ -100,6 +100,7 @@ Returns:
 
 
 def get_role(ctx, role_id):
+    role_id = str(role_id)
     try:
         if '<@&' in role_id:
             role = ctx.author.guild.get_role(int(role_id[3:-1]))
