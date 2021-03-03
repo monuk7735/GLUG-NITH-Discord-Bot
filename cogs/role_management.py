@@ -28,7 +28,7 @@ def extract_roles(ctx, *args):
 
 
 async def delete_message(ctx, messages):
-    await asyncio.sleep(10)
+    await asyncio.sleep(15)
     await ctx.channel.delete_messages(iter(messages))
 
 
@@ -45,7 +45,9 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         msg += "opt\n"
         msg += extract_commands(self.opt.commands, margin=" ")[1][:-2]
         msg += "```"
-        await ctx.channel.send(msg)
+
+        sent = await ctx.channel.send(msg)
+        await delete_message(ctx, [ctx.message, sent])
 
     @opt.command(name="list", description=role_manager_config["opt"]["list"]["description"])
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
@@ -138,6 +140,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
 
         sent = await ctx.channel.send(msg)
         await delete_message(ctx, [ctx.message, sent])
+
 
 def setup(bot):
     bot.add_cog(RoleManager(bot))

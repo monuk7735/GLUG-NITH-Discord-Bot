@@ -1,10 +1,16 @@
 import functools
+import os
 
 from discord.ext import commands
 import discord
+import pymongo
 
 import libs.config as config
 from libs.embed import officialEmbed
+
+username = os.getenv("DB_USERNAME")
+password = os.getenv("DB_PASSWORD")
+db_client = pymongo.MongoClient(f"mongodb+srv://{username}:{password}@glugbot.rzs2q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 
 """
 Any and all checks common to more than one command should be performed here
@@ -29,9 +35,7 @@ Any and all checks common to more than one command should be performed here
     """
 
 
-def custom_check(allowed_channels=[], allowed_in_dm=True):
-
-    allowed_channels += ['glug-bot-test', 'bot-commands', 'bot-testing']
+def custom_check(allowed_channels:list=[], req_roles:list=[], allowed_in_dm=True):
 
     def guild_check(cmd):
 
@@ -49,9 +53,20 @@ def custom_check(allowed_channels=[], allowed_in_dm=True):
                     await ctx.channel.send("Command not allowed in DM")
                     return False
             else:
-                if not ctx.channel.name in allowed_channels:
+                if not ctx.channel.name in allowed_channels+['glug-bot-test', 'bot-commands', 'bot-testing']:
                     print(
                         f"Command used in {ctx.channel.name} channel while allowed channels were {str(allowed_channels)}")
+                    return False
+
+            if len(req_roles) > 0:
+                role_found = False
+                user = get_member(ctx, ctx.author.id)
+                for role in user.roles:
+                    if role.id in req_roles:
+                        role_found = True
+                        break
+                if not role_found:
+                    await ctx.channel.send("You don't have required role(s)")
                     return False
 
             return await cmd(*args, **kwargs)
@@ -74,6 +89,7 @@ Returns:
 
 
 def get_member(ctx, user_id):
+    user_id = str(user_id)
     try:
         if '<@!' in user_id:
             user = ctx.author.guild.get_member(int(user_id[3:-1]))
@@ -113,7 +129,6 @@ def get_role(ctx, role_id):
 
     return role
 
-
 """
 Function to send contribution embed as reply
 
@@ -123,7 +138,6 @@ Args:
 Returns:
     None
 """
-
 
 async def contribute(ctx):
     embed = officialEmbed(

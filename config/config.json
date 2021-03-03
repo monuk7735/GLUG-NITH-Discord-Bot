@@ -2,11 +2,11 @@
   "prefix": ["glug ", "Glug ", "GLUG "],
   "cogs": [
     "cogs.help",
-    "cogs.welcome",
+    "cogs.automations",
     "cogs.cli",
     "cogs.institute",
     "cogs.role_management",
-    "cogs.stats"
+    "cogs.moderation"
   ],
   "info": {
     "name": "GLUG",
@@ -19,6 +19,10 @@
     "embed": 0
   },
   "roles": {
+    "mod":[
+      537987659205967873,
+      538029591340515328
+    ],
     "all": {
       "admins": 537987659205967873,
       "moderator": 538029591340515328,
@@ -34,7 +38,8 @@
       "cp": 799226571184537611,
       "ml/dl": 799226964468301844,
       "linux_tools": 799227307960696842,
-      "dev": 799228480415858688
+      "dev": 799228480415858688,
+      "on_call":816562976995016715
     },
     "optional": [
       799225013793718302,
