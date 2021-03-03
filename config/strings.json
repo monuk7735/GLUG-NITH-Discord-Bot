@@ -10,7 +10,7 @@
     "institute": {
       "name": "Institute related commands",
       "search": {
-        "description":"Search in NITH",
+        "description": "Search in NITH",
         "student": {
           "description": "Search for students",
           "usage": "{Name}"
@@ -66,11 +66,27 @@
         }
       }
     },
-    "stats": {
-      "name": "Stats",
+    "moderation": {
+      "name": "Moderation Commands",
       "stats": {
-        "description": "Stats of the Server",
-        "usage": ""
+        "description": "Stats of the Server"
+      },
+      "onCall": {
+        "description": "Manage On Call role",
+        "list": {
+          "description": "List On Call role holders"
+        },
+        "add": {
+          "description": "Add to On Call",
+          "usage": "[@Mention]"
+        },
+        "remove": {
+          "description": "Remove from On Call",
+          "usage": "[@Mention]"
+        },
+        "next": {
+          "description": "Next Cycle"
+        }
       }
     }
   },

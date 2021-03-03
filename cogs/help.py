@@ -1,40 +1,46 @@
 import discord
-import libs.config as config
-from libs.command_manager import custom_check
 from discord.ext import commands
+
+import libs.config as config
+from libs.command_manager import custom_check, get_member
 
 help_config = config.get_string("commands")["help"]
 
-def extract_commands(all_commands, margin="", getcount=False):
-    padding = 24 - len(margin)
+mod_roles = config.get_config("roles")["mod"]
+
+def get_count(all_commands, is_mod=False):
     count = 0
     for command in all_commands:
-        if command.hidden:
+        if command.hidden and not is_mod:
             continue
-        if isinstance(command,commands.core.Group):
-            _count = extract_commands(command.commands,margin=margin+"│    ", getcount=True)
-            if _count > 0:
+        if isinstance(command, commands.core.Group):
+            if get_count(command.commands, is_mod=is_mod) > 0:
                 count += 1
         else:
             count += 1
+    return count
 
-    if getcount:
-        return count
+
+def extract_commands(all_commands, margin="", is_mod=False):
+    padding = 24 - len(margin)
+
+    count = get_count(all_commands, is_mod=is_mod)
 
     i = 0
     msg = ""
     for command in all_commands:
-        if command.hidden:
+        if command.hidden and not is_mod:
             continue
-        if isinstance(command,commands.core.Group):
-
+        if isinstance(command, commands.core.Group):
             if i == count - 1:
-                status, message = extract_commands(command.commands,margin=margin+"    ")
+                status, message = extract_commands(
+                    command.commands, margin=margin+"    ", is_mod=is_mod)
             else:
-                status, message = extract_commands(command.commands,margin=margin+"│   ")
+                status, message = extract_commands(
+                    command.commands, margin=margin+"│   ", is_mod=is_mod)
             if status:
                 i += 1
-                msg = margin
+                msg += margin
                 if i == count:
                     msg += "└── "
                 else:
@@ -45,9 +51,8 @@ def extract_commands(all_commands, margin="", getcount=False):
                 msg += f"{tmp:{padding}s}"
                 if command.description:
                     msg += f" │ {command.description}"
-                msg += "\n"
 
-                msg += f"{message}\n"
+                msg += f"\n{message}"
         else:
             i += 1
             msg += margin
@@ -63,19 +68,19 @@ def extract_commands(all_commands, margin="", getcount=False):
                 msg += f" │ {command.description}"
             msg += "\n"
             if i == count:
-                msg += f"{margin}"
+                msg += f"{margin}\n"
     if i > 0:
-        return (True,msg)
+        return (True, msg)
     return (False, "")
 
-def get_msg(bot):
+
+def get_msg(bot, is_mod):
     count = 0
     for cog_name in bot.cogs:
-        cog = f"\n> {cog_name}\n"
+
         all_commands = bot.get_cog(cog_name).get_commands()
-        
-        _count = extract_commands(all_commands, " │   ", getcount=True)
-        if _count > 0:
+
+        if get_count(all_commands, is_mod=is_mod) > 0:
             count += 1
 
     msg = f"```\n"
@@ -83,8 +88,8 @@ def get_msg(bot):
     msg += f"{' '*6} _|        _|        _|    _|  _|       \n"
     msg += f"{' '*6} _|  _|_|  _|        _|    _|  _|  _|_| \n"
     msg += f"{' '*6} _|    _|  _|        _|    _|  _|    _| \n"
-    msg += f"{' '*6}   _|_|_|  _|_|_|_|    _|_|      _|_|_| \n" 
- 
+    msg += f"{' '*6}   _|_|_|  _|_|_|_|    _|_|      _|_|_| \n"
+
     msg += "\n"
     msg += "          {required args} [optional args]\n"
     msg += "\n"
@@ -94,24 +99,26 @@ def get_msg(bot):
 
     i = 0
     for cog_name in bot.cogs:
-        cog = f"\n> {cog_name}\n"
 
         # Loop through all commands present in cog.
         all_commands = bot.get_cog(cog_name).get_commands()
-        
-        if i == count -1:
-            status, message = extract_commands(all_commands, margin="     ")
+
+        if i == count - 1:
+            status, message = extract_commands(
+                all_commands, margin="     ", is_mod=is_mod,)
         else:
-            status, message = extract_commands(all_commands, margin=" │   ")
+            status, message = extract_commands(
+                all_commands, margin=" │   ", is_mod=is_mod,)
         if status:
             i += 1
             if i == count:
                 msg += " └── "+cog_name + "\n"
             else:
                 msg += " ├── "+cog_name + "\n"
-            msg += message + "\n"
+            msg += message
     msg += "```"
     return msg
+
 
 class Help(commands.Cog, name=help_config["name"]):
     def __init__(self, bot):
@@ -124,7 +131,12 @@ class Help(commands.Cog, name=help_config["name"]):
     @commands.command(name="help", description=help_config["help"]["description"])
     @custom_check()
     async def help_user(self, ctx, *args):
-        await ctx.send(get_msg(self.bot))
+        await ctx.send(get_msg(self.bot, False))
+
+    @commands.command(name="mod", description=help_config["help"]["description"], hidden=True)
+    @custom_check(req_roles=mod_roles)
+    async def help_mod(self, ctx, *args):
+        await ctx.send(get_msg(self.bot, True))
 
 
 def setup(bot):

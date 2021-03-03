@@ -10,6 +10,8 @@ discord = "*"
 requests = "*"
 bs4 = "*"
 prettytable = "*"
+pymongo = "*"
+dnspython = "*"
 
 [requires]
 python_version = "3.9"
