@@ -6,6 +6,7 @@ from libs.command_manager import custom_check, get_role, db_client, get_member
 
 mod_roles = config.get_config("roles")["mod"]
 moderation_config = config.get_string("commands")["moderation"]
+optional_roles = config.get_config("roles")["optional"]
 
 """
 Args:
