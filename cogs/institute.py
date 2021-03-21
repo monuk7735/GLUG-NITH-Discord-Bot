@@ -23,7 +23,7 @@ r_result_using_roll = "student/"
 student_by_name = "student_name_search"
 faculty_by_name = "faculty_name_search"
 student_by_roll = "student_info"
-result_using_roll = "result"
+result_using_roll = "result/"
 
 
 """
@@ -133,15 +133,14 @@ Returns:
 
 
 async def result_by_roll(roll, *args):
-    # data = {
-    #     "rollno": roll.lower(),
-    #     "api_key" : api_key
-    # }
+    data = {
+        "api_key" : api_key
+    }
 
     # msg = "```"
-    # response = requests.post(api_url + result_using_roll, data=data)
+    response = requests.post(f"{api_url}{result_using_roll}{roll}", data=data)
 
-    response = requests.get(f"{r_api_url}{r_result_using_roll}{roll}")
+    # response = requests.get(f"{r_api_url}{r_result_using_roll}{roll}")
 
     # if len(response.text) == 0:
     #     msg += "No Results Found"
@@ -150,7 +149,7 @@ async def result_by_roll(roll, *args):
 
     response_json = json.loads(response.text)
 
-    if "status" in response_json:
+    if "status" in response_json or response.status != 200:
         return["```\nNo results found\n```"]
 
     result = Result(response_json)
