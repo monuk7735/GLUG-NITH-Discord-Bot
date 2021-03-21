@@ -79,3 +79,35 @@ class Result():
 
 
         return msg
+
+class ResultNew():
+    def __init__(self, data):
+        self.data = data
+        self.name = " ".join([i[0].upper()+i[1:].lower() for i in data['name'].split(" ")])
+        self.roll = data['rollno'].upper()
+        self.cgpi = data['cgpi']
+
+        self.sems = data['semester']
+
+    def parse(self):
+        msg     = ["```\n"]
+        msg[0] += f"Name : {self.name}\n"
+        msg[0] += f"Roll : {self.roll}\n"
+        msg[0] += f"CGPI : {self.cgpi}\n"
+        msg[0] += "\n```"
+
+        for i in self.sems:
+            sem = sems[i]
+            msg.append("```\n")
+            msg[i+1] += f"Semester: {i}\n"
+            table = PrettyTable()
+            table.field_names = ["Subject Code","Credit", "Pointer", "Sub GP"]
+            for subject in sem['subject']:
+                table.add_row([subject['subject_code'], subject['credit'], f"{subject['pointer']:2}", f"{int(subject['credit']) * int(subject['pointer']):2s}"])
+            msg[i+1] += str(table)
+            msg[i+1] += "\n\n"
+            msg[i+1] += f"SGPI: {sem['sgpi']}\n"
+            msg[i+1] += "```"
+
+
+        return msg
