@@ -12,6 +12,7 @@
 - monuk7735
   - Initial commit and creation, initial cogs and base features
   - Optional Role Opting
+  - Slash Commands
 
 ***Commands***
 

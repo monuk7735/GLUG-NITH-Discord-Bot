@@ -133,7 +133,6 @@ Returns:
 
 def result_by_roll(roll, sem):
     try:
-        print(sem)
         sem = int(sem)
     except ValueError:
         return["```\nInvalid Sem\n```"]
@@ -169,7 +168,8 @@ def result_by_roll(roll, sem):
         return["```\nInvalid Sem\n```"]
 
     if sem == 0:
-        return result_list
+        return ["**Hey there, CoderMan!**",result_list[0] + result_list[1]]
+        # return result_list
 
     return [result_list[0] + result_list[sem]]
 
