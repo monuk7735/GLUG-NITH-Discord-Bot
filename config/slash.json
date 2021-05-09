@@ -1,11 +1,11 @@
 {
   "result": {
     "name": "result",
-    "description": "Get result of a student",
+    "description": "Get result of any student using roll",
     "options": [
       {
         "name": "roll",
-        "description": "roll number",
+        "description": "Roll Number",
         "required": true,
         "type": 3
       },
@@ -19,7 +19,7 @@
   },
   "search": {
     "name": "search",
-    "description": "Search within NITH",
+    "description": "Search for people in NITH",
     "options": [
       {
         "name": "search_for",
@@ -28,12 +28,12 @@
         "type": 3,
         "choices": [
           {
-            "name": "Faculty",
-            "value": "1"
-          },
-          {
             "name": "Student",
             "value": "0"
+          },
+          {
+            "name": "Faculty",
+            "value": "1"
           }
         ]
       },
@@ -47,7 +47,7 @@
   },
   "announcements": {
     "name": "announcements",
-    "description": "Get Latest announcements from NITH Official Website",
+    "description": "Fetch latest announcements from Official NITH Website",
     "options": [
       {
         "name": "count",

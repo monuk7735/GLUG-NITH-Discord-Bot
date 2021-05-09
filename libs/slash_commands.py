@@ -6,7 +6,7 @@ from discord import Client
 import libs.config as config
 import cogs.institute as InstituteCog
 
-guild_id = [643486522003161111]
+guild_id = [643486522003161111, 536947195338031124]
 
 
 def start(client: Client):
