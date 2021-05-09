@@ -51,6 +51,9 @@ async def on_ready():
     if s_status != "":
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=s_status))
 
+    # Load Slash Commands
+    slash.start(bot)
+
     print(f"\n# Logged in as {bot.user}", end="\n\n")
 
 
@@ -64,9 +67,6 @@ async def on_command_error(ctx, error):
             return
 
     raise error
-
-# Load Slash Commands
-slash.start(bot)
 
 # Starting the bot.
 bot.run(os.getenv("TOKEN"))

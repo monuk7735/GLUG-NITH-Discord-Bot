@@ -47,7 +47,7 @@
   },
   "announcements": {
     "name": "announcements",
-    "description": "Get Latest from NITH Official Website",
+    "description": "Get Latest announcements from NITH Official Website",
     "options": [
       {
         "name": "count",
