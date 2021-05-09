@@ -7,6 +7,7 @@ from discord.ext import commands
 from discord.ext.commands import CommandNotFound, MissingRequiredArgument
 
 import libs.config as config
+import libs.slash_commands as slash
 
 command_prefixes = config.get_config("prefix")
 
@@ -63,6 +64,9 @@ async def on_command_error(ctx, error):
             return
 
     raise error
+
+# Load Slash Commands
+slash.start(bot)
 
 # Starting the bot.
 bot.run(os.getenv("TOKEN"))

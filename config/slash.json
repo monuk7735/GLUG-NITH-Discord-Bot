@@ -1,0 +1,60 @@
+{
+  "result": {
+    "name": "result",
+    "description": "Get result of a student",
+    "options": [
+      {
+        "name": "roll",
+        "description": "roll number",
+        "required": true,
+        "type": 3
+      },
+      {
+        "name": "sem",
+        "description": "Semester",
+        "required": false,
+        "type": 4
+      }
+    ]
+  },
+  "search": {
+    "name": "search",
+    "description": "Search within NITH",
+    "options": [
+      {
+        "name": "search_for",
+        "description": "Search for Student or Faculty",
+        "required": true,
+        "type": 3,
+        "choices": [
+          {
+            "name": "Faculty",
+            "value": "1"
+          },
+          {
+            "name": "Student",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "description": "Name to search for",
+        "required": true,
+        "type": 3
+      }
+    ]
+  },
+  "announcements": {
+    "name": "announcements",
+    "description": "Get Latest from NITH Official Website",
+    "options": [
+      {
+        "name": "count",
+        "description": "Number of announcements to retrieve",
+        "required": false,
+        "type": 4
+      }
+    ]
+  }
+}
