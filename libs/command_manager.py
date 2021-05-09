@@ -10,7 +10,7 @@ from libs.embed import officialEmbed
 
 username = os.getenv("DB_USERNAME")
 password = os.getenv("DB_PASSWORD")
-db_client = pymongo.MongoClient(f"mongodb+srv://{username}:{password}@glugbot.rzs2q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+db_client = pymongo.MongoClient(f"mongodb://{username}:{password}@glugbot.rzs2q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 
 """
 Any and all checks common to more than one command should be performed here
