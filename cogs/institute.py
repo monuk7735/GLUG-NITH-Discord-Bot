@@ -16,14 +16,13 @@ from cogs.help import extract_commands
 institute_config = config.get_string("commands")["institute"]
 
 api_key = os.getenv("API_KEY")
+api_url = os.getenv("API_URL")
 nith_url = "https://nith.ac.in/"
-api_url = "https://nith-app-greyhats.herokuapp.com/"
-r_api_url = "https://nithp.herokuapp.com/api/result/"
-r_result_using_roll = "student/"
+
 student_by_name = "student_name_search"
 faculty_by_name = "faculty_name_search"
 student_by_roll = "student_info"
-result_using_roll = "result"
+result_using_roll = "result/"
 
 
 """
@@ -40,7 +39,7 @@ Returns:
 """
 
 
-async def search_students_by_name(name):
+def search_students_by_name(name):
     data = {
         "query": name,
         "api_key": api_key
@@ -85,7 +84,7 @@ Returns:
 """
 
 
-async def search_faculty_by_name(name):
+def search_faculty_by_name(name):
     data = {
         "query": name,
         "api_key": api_key
@@ -132,38 +131,39 @@ Returns:
 """
 
 
-async def result_by_roll(roll, *args):
-    # data = {
-    #     "rollno": roll.lower(),
-    #     "api_key" : api_key
-    # }
+def result_by_roll(roll, sem):
+    try:
+        print(sem)
+        sem = int(sem)
+    except ValueError:
+        return["```\nInvalid Sem\n```"]
 
-    # msg = "```"
-    # response = requests.post(api_url + result_using_roll, data=data)
+    data = {
+        "api_key": api_key
+    }
 
-    response = requests.get(f"{r_api_url}{r_result_using_roll}{roll}")
+    response = requests.get(
+        f"{api_url}{result_using_roll}{roll.lower()}", data=data)
 
-    # if len(response.text) == 0:
-    #     msg += "No Results Found"
-    #     msg += "```"
-    #     return msg
+    if response.status_code not in [200, 404]:
+        print(response)
+        return ["```\nSomething went wrong\n```"]
 
-    response_json = json.loads(response.text)
+    try:
+        response_json = json.loads(response.text)
+    except:
+        print(response.text)
+        return ["```\nUnknown error occured\n```"]
 
-    if "status" in response_json:
-        return["```\nNo results found\n```"]
+    if len(response_json) == 0:
+        return ["```\nNot Found\n```"]
 
     result = Result(response_json)
 
     result_list = result.parse()
 
-    if len(args) == 0:
+    if sem == -1:
         return [result_list[0]+result_list[-1]]
-    else:
-        try:
-            sem = int(args[0])
-        except ValueError:
-            return["```\nInvalid Sem\n```"]
 
     if sem < 0 or sem > len(result_list[1:]):
         return["```\nInvalid Sem\n```"]
@@ -192,7 +192,7 @@ def get_announcements(count):
     embed = officialEmbed("NITH", f"Last {count} announcements")
     embed.set_thumbnail(url=config.get_config("info")["logo"])
 
-    for i, a in enumerate(soup.find(id="Announcements").findAll('a', {"class": "notranslate"})):
+    for i, a in enumerate(soup.find('ul', {"class": "allnithlinks"}).findAll('a', {"class": "notranslate"})):
         if i == count:
             break
         link = a.get('href')
@@ -227,22 +227,22 @@ class Institute(commands.Cog, name=institute_config["name"]):
     @search.command(name="student", description=institute_config["search"]["student"]["description"], usage=institute_config["search"]["student"]["usage"])
     async def student_search(self, ctx, *args):
         async with ctx.channel.typing():
-            messages = await search_students_by_name(" ".join(args))
+            messages = search_students_by_name(" ".join(args))
             for msg in messages:
                 await ctx.channel.send(msg)
 
     @search.command(name="faculty", description=institute_config["search"]["faculty"]["description"], usage=institute_config["search"]["faculty"]["usage"])
     async def faculty_search(self, ctx, *args):
         async with ctx.channel.typing():
-            messages = await search_faculty_by_name(" ".join(args))
+            messages = search_faculty_by_name(" ".join(args))
             for msg in messages:
                 await ctx.channel.send(msg)
 
     @commands.command(name="result", description=institute_config["result"]["description"], usage=institute_config["result"]["usage"])
     @custom_check()
-    async def result(self, ctx, roll, *args):
+    async def result(self, ctx, roll, sem="-1"):
         async with ctx.channel.typing():
-            results = await result_by_roll(roll, *args)
+            results = result_by_roll(roll, sem)
             for msg in results:
                 await ctx.channel.send(msg)
 

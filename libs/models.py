@@ -7,7 +7,7 @@ from prettytable import PrettyTable
 
 class Student():
     def __init__(self, data):
-        self.name = " ".join([i[0].upper()+i[1:] for i in data['name'].split(" ")])
+        self.name = data['name'].title()
         self.branch = data['branch']
         self.roll = data['rollno'].upper()
     
@@ -44,19 +44,13 @@ class Faculty():
 class Result():
     def __init__(self, data):
         self.data = data
-        self.name = " ".join([i[0].upper()+i[1:].lower() for i in data['name'].split(" ")])
-        self.roll = data['roll'].upper()
+        self.name = data['name'].title()
+        self.roll = data['rollno'].upper()
         self.cgpi = data['cgpi']
 
-        self.sems : list = []
-
-        for d in data['summary']:
-            d['subjects'] = []
-            self.sems.append(d)
-
-        for d in data['result']:
-            self.sems[d['sem']-1]['subjects'].append(d)
-
+        self.sems = []
+        for i in data["semester"]:
+            self.sems.append(data["semester"][i])
 
     def parse(self):
         msg     = ["```\n"]
@@ -69,9 +63,9 @@ class Result():
             msg.append("```\n")
             msg[i+1] += f"Semester: {i+1}\n"
             table = PrettyTable()
-            table.field_names = ["Subject Code","Point", "Sub GP", "Grade"]
-            for subject in sem['subjects']:
-                table.add_row([subject['subject_code'], subject['sub_point'], f"{subject['sub_gp']:2}", f"{subject['grade']:2s}"])
+            table.field_names = ["Subject Code","Credit", "Sub GP", "Pointer"]
+            for subject in sem['subject']:
+                table.add_row([subject['subject_code'], subject['credit'], f"{int(subject['credit']) * int(subject['pointer']):2}", f"{int(subject['pointer']):2}"])
             msg[i+1] += str(table)
             msg[i+1] += "\n\n"
             msg[i+1] += f"SGPI: {sem['sgpi']}\n"
