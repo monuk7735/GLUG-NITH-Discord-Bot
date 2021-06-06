@@ -78,14 +78,13 @@ def custom_check(allowed_channels: list = [], req_roles: list = [], allowed_in_d
 
 
 """
-Function to get Member object from user_id
+Function to extract user_id from user_mention
 
 Args:
-    ctx: The context passed to the command function
-    user_id: The mentioned user_id
+    user_mention: The mentioned user
 
 Returns:
-    member: Member if found otherwise None
+    user_id: int user_id if valid mention otherwise None
 """
 
 
@@ -102,18 +101,17 @@ def extract_member_id(user_mention):
 
 
 """
-Function to get Role object from role_id
+Function to extract role_id from role_mention
 
 Args:
-    ctx: The context passed to the command function
-    role_id: The mentioned role_id
+    role_mention: The mentioned role
 
 Returns:
-    role: Role if found otherwise None
+    role_id: int role_id if valid mention otherwise None
 """
 
 
-def extarct_role_id(role_mention):
+def extract_role_id(role_mention):
     try:
         if '<@&' in role_mention:
             return int(role_mention[3:-1])
@@ -138,6 +136,6 @@ Returns:
 
 async def contribute(ctx):
     embed = officialEmbed(
-        "Contribute", "Contribute to this project, help create more cool features", url=config.get_config("info")["url"])
+        "Contribute", "Contribute to this project, create more cool features", url=config.get_config("info")["url"])
     embed.set_thumbnail(url=config.get_string("logos")["github"])
     await ctx.send(embed=embed)
