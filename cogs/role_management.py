@@ -3,9 +3,10 @@ import asyncio
 
 import discord
 from discord.ext import commands
+from discord.ext.commands import Context
 
 import libs.config as config
-from libs.command_manager import custom_check, get_role
+from libs.command_manager import custom_check
 from cogs.help import extract_commands
 
 role_manager_config = config.get_string("commands")["role_manager"]
@@ -16,8 +17,8 @@ def extract_roles(ctx, *args):
     invalid_role_ids = []
     for role_id in args:
         if role_id.lower() in config.get_config("roles")["all"]:
-            role = get_role(ctx, str(config.get_config(
-                "roles")["all"][role_id.lower()]))
+            role = ctx.guild.get_role(config.get_config("roles")[
+                                      "all"][role_id.lower()])
         else:
             role = None
         if role:
@@ -27,7 +28,7 @@ def extract_roles(ctx, *args):
     return (valid_roles, invalid_role_ids)
 
 
-async def delete_message(ctx, messages):
+async def delete_message(ctx:Context, messages):
     await asyncio.sleep(15)
     await ctx.channel.delete_messages(iter(messages))
 
@@ -38,7 +39,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
 
     @commands.group(name="opt", pass_context=True)
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
-    async def opt(self, ctx):
+    async def opt(self, ctx:Context):
         if ctx.invoked_subcommand:
             return
         msg = "```\n"
@@ -51,10 +52,10 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
 
     @opt.command(name="list", description=role_manager_config["opt"]["list"]["description"])
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
-    async def opt_list(self, ctx):
+    async def opt_list(self, ctx:Context):
         msg = "```\n"
         for role in config.get_config("roles")["optional"]:
-            role = get_role(ctx, str(role))
+            role = ctx.guild.get_role(str(role))
             msg += f"{role.name}\n"
         msg += "```"
         sent = await ctx.channel.send(msg)
@@ -63,7 +64,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
 
     @opt.command(name="out", description=role_manager_config["opt"]["out"]["description"], usage=role_manager_config["opt"]["out"]["usage"])
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
-    async def opt_out(self, ctx, *args):
+    async def opt_out(self, ctx:Context, *args):
         if len(args) == 0:
             await ctx.channel.send("Need some roles to opt out of")
             return
@@ -104,7 +105,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
 
     @opt.command(name="in", description=role_manager_config["opt"]["in"]["description"], usage=role_manager_config["opt"]["in"]["usage"])
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
-    async def opt_in(self, ctx, *args):
+    async def opt_in(self, ctx:Context, *args):
         if len(args) == 0:
             await ctx.channel.send("Need some roles to opt into")
             return
