@@ -78,14 +78,46 @@
         },
         "add": {
           "description": "Add to On Call",
-          "usage": "[@Mention]"
+          "usage": "[@User]"
         },
         "remove": {
           "description": "Remove from On Call",
-          "usage": "[@Mention]"
+          "usage": "[@User]"
         },
         "next": {
           "description": "Next Cycle"
+        }
+      },
+      "reactrole": {
+        "list": {
+          "description": "List created categories"
+        },
+        "create": {
+          "description": "Create a reactrole category",
+          "usage": "{uid} {Title}"
+        },
+        "delete": {
+          "description": "Delete a reactrole category",
+          "usage": "{uid}"
+        },
+        "genmsg": {
+          "description": "Generate Message for a reactrole category",
+          "usage": "{uid}"
+        },
+        "update": {
+          "description": "Update a reactrole category",
+          "title": {
+            "description": "Update a reactrole category's title",
+            "usage": "{uid} {New Title}"
+          },
+          "set": {
+            "description": "Set an emoji-Role pair to reactrole category",
+            "usage": "{uid} {emoji} {@Role}"
+          },
+          "remove": {
+            "description": "Remove emoji from reactrole category",
+            "usage": "{uid} {emoji}"
+          }
         }
       }
     }

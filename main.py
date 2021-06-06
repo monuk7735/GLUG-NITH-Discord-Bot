@@ -23,7 +23,8 @@ intents = discord.Intents.default()
 intents.members = True
 intents.guilds = True
 
-bot = commands.Bot(command_prefix=command_prefixes, intents=intents, case_insensitive=True)
+bot = commands.Bot(command_prefix=command_prefixes,
+                   intents=intents, case_insensitive=True)
 
 # Loading the cogs.
 if __name__ == "__main__":
