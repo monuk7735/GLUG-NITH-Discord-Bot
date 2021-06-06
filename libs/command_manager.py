@@ -1,16 +1,18 @@
 import functools
 import os
 
-from discord.ext import commands
 import discord
 import pymongo
+from discord.ext import commands
+from discord.ext.commands import Context
 
 import libs.config as config
 from libs.embed import officialEmbed
 
 username = os.getenv("DB_USERNAME")
 password = os.getenv("DB_PASSWORD")
-db_client = pymongo.MongoClient(f"mongodb://{username}:{password}@glugbot.rzs2q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+db_client = pymongo.MongoClient(
+    f"mongodb+srv://{username}:{password}@glugbot.rzs2q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 
 """
 Any and all checks common to more than one command should be performed here
@@ -35,13 +37,13 @@ Any and all checks common to more than one command should be performed here
     """
 
 
-def custom_check(allowed_channels:list=[], req_roles:list=[], allowed_in_dm=True):
+def custom_check(allowed_channels: list = [], req_roles: list = [], allowed_in_dm=True):
 
     def guild_check(cmd):
 
         @functools.wraps(cmd)
         async def wrapper(*args, **kwargs):
-            ctx = args[1]
+            ctx:Context = args[1]
             print(
                 f"{ctx.author}({ctx.author.id}) in {ctx.channel}: {ctx.message.content}")
             if type(ctx) is not commands.Context:
@@ -52,16 +54,15 @@ def custom_check(allowed_channels:list=[], req_roles:list=[], allowed_in_dm=True
                 if not allowed_in_dm:
                     await ctx.channel.send("Command not allowed in DM")
                     return False
-            else:
-                if not ctx.channel.name in allowed_channels+['glug-bot-test', 'bot-commands', 'bot-testing']:
+            elif len(allowed_channels):
+                if not ctx.channel.name in allowed_channels + ['glug-bot-test', 'bot-commands']:
                     print(
                         f"Command used in {ctx.channel.name} channel while allowed channels were {str(allowed_channels)}")
                     return False
 
             if len(req_roles) > 0:
                 role_found = False
-                user = get_member(ctx, ctx.author.id)
-                for role in user.roles:
+                for role in ctx.author.roles:
                     if role.id in req_roles:
                         role_found = True
                         break
@@ -77,57 +78,50 @@ def custom_check(allowed_channels:list=[], req_roles:list=[], allowed_in_dm=True
 
 
 """
-Function to get Member object from user_id
+Function to extract user_id from user_mention
 
 Args:
-    ctx: The context passed to the command function
-    user_id: The mentioned user_id
+    user_mention: The mentioned user
 
 Returns:
-    member: Member if found otherwise None
+    user_id: int user_id if valid mention otherwise None
 """
 
 
-def get_member(ctx, user_id):
-    user_id = str(user_id)
+def extract_member_id(user_mention):
     try:
-        if '<@!' in user_id:
-            user = ctx.author.guild.get_member(int(user_id[3:-1]))
-        elif '<@' in user_id:
-            user = ctx.author.guild.get_member(int(user_id[2:-1]))
+        if '<@!' in user_mention:
+            return int(user_mention[3:-1])
+        elif '<@' in user_mention:
+            return int(user_mention[2:-1])
         else:
-            user = ctx.author.guild.get_member(int(user_id))
+            return int(user_mention)
     except ValueError:
-        user = None
-
-    return user
+        return None
 
 
 """
-Function to get Role object from role_id
+Function to extract role_id from role_mention
 
 Args:
-    ctx: The context passed to the command function
-    role_id: The mentioned role_id
+    role_mention: The mentioned role
 
 Returns:
-    role: Role if found otherwise None
+    role_id: int role_id if valid mention otherwise None
 """
 
 
-def get_role(ctx, role_id):
-    role_id = str(role_id)
+def extract_role_id(role_mention):
     try:
-        if '<@&' in role_id:
-            role = ctx.author.guild.get_role(int(role_id[3:-1]))
-        elif '<@' in role_id:
-            role = ctx.author.guild.get_role(int(role_id[2:-1]))
+        if '<@&' in role_mention:
+            return int(role_mention[3:-1])
+        elif '<@' in role_mention:
+            return int(role_mention[2:-1])
         else:
-            role = ctx.author.guild.get_role(int(role_id))
+            return int(role_mention)
     except ValueError:
-        role = None
+        return None
 
-    return role
 
 """
 Function to send contribution embed as reply
@@ -139,8 +133,9 @@ Returns:
     None
 """
 
+
 async def contribute(ctx):
     embed = officialEmbed(
-        "Contribute", "Contribute to this project, help create more cool features", url=config.get_config("info")["url"])
+        "Contribute", "Contribute to this project, create more cool features", url=config.get_config("info")["url"])
     embed.set_thumbnail(url=config.get_string("logos")["github"])
     await ctx.send(embed=embed)

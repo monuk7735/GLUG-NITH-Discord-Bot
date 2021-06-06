@@ -13,11 +13,12 @@
     "logo": "https://i.imgur.com/oscSH3x.png",
     "icon": "https://i.imgur.com/oscSH3x.png",
     "footer": "From GLUG-NITH with \u2764!",
-    "url": "https://github.com/monuk7735/NITH-Discord-Bot"
+    "url": "https://github.com/monuk7735/GLUG-NITH-Discord-Bot"
   },
   "colors": {
     "embed": 0
   },
+  "guild_id":536947195338031124,
   "roles": {
     "mod":[
       537987659205967873,
@@ -48,8 +49,7 @@
       799226964468301844,
       799227307960696842,
       799228480415858688
-    ],
-    "moderators": [537987659205967873, 538029591340515328]
+    ]
   },
   "channels": {
     "competitive-programming": 536968722519293952,

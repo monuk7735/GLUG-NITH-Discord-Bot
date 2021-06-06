@@ -1,12 +1,14 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import Context
 
 import libs.config as config
-from libs.command_manager import custom_check, get_member
+from libs.command_manager import custom_check
 
 help_config = config.get_string("commands")["help"]
 
 mod_roles = config.get_config("roles")["mod"]
+
 
 def get_count(all_commands, is_mod=False):
     count = 0
@@ -125,17 +127,17 @@ class Help(commands.Cog, name=help_config["name"]):
         self.bot = bot
 
     # @commands.command(name="staff", description=s_help["staff_help"])
-    # async def help_staff(self, ctx):
+    # async def help_staff(self, ctx:Context):
     #     await ctx.send(get_msg(self.bot, True))
 
     @commands.command(name="help", description=help_config["help"]["description"])
     @custom_check()
-    async def help_user(self, ctx, *args):
+    async def help_user(self, ctx:Context, *args):
         await ctx.send(get_msg(self.bot, False))
 
     @commands.command(name="mod", description=help_config["help"]["description"], hidden=True)
     @custom_check(req_roles=mod_roles)
-    async def help_mod(self, ctx, *args):
+    async def help_mod(self, ctx:Context, *args):
         await ctx.send(get_msg(self.bot, True))
 
 
