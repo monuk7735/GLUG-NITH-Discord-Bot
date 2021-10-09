@@ -6,7 +6,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 import libs.config as config
-from libs.command_manager import custom_check
+from libs.command_manager import custom_check, delete_messages
 from cogs.help import extract_commands
 
 role_manager_config = config.get_string("commands")["role_manager"]
@@ -28,9 +28,9 @@ def extract_roles(ctx, *args):
     return (valid_roles, invalid_role_ids)
 
 
-async def delete_message(ctx:Context, messages):
-    await asyncio.sleep(15)
-    await ctx.channel.delete_messages(iter(messages))
+# async def delete_message(ctx:Context, *messages):
+#     await asyncio.sleep(15)
+#     await ctx.channel.delete_messages(iter(messages))
 
 
 class RoleManager(commands.Cog, name=role_manager_config["name"]):
@@ -48,7 +48,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         msg += "```"
 
         sent = await ctx.channel.send(msg)
-        await delete_message(ctx, [ctx.message, sent])
+        await delete_messages(ctx, ctx.message, sent)
 
     @opt.command(name="list", description=role_manager_config["opt"]["list"]["description"])
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
@@ -60,7 +60,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         msg += "```"
         sent = await ctx.channel.send(msg)
 
-        await delete_message(ctx, [ctx.message, sent])
+        await delete_messages(ctx, ctx.message, sent)
 
     @opt.command(name="out", description=role_manager_config["opt"]["out"]["description"], usage=role_manager_config["opt"]["out"]["usage"])
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
@@ -101,7 +101,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         msg += "```"
 
         sent = await ctx.channel.send(msg)
-        await delete_message(ctx, [ctx.message, sent])
+        await delete_messages(ctx, ctx.message, sent)
 
     @opt.command(name="in", description=role_manager_config["opt"]["in"]["description"], usage=role_manager_config["opt"]["in"]["usage"])
     @custom_check(allowed_channels=['i-can-help-with'], allowed_in_dm=False)
@@ -140,7 +140,7 @@ class RoleManager(commands.Cog, name=role_manager_config["name"]):
         msg += "```"
 
         sent = await ctx.channel.send(msg)
-        await delete_message(ctx, [ctx.message, sent])
+        await delete_messages(ctx, ctx.message, sent)
 
 
 def setup(bot):

@@ -1,5 +1,6 @@
 import functools
 import os
+import asyncio
 
 import discord
 import pymongo
@@ -122,6 +123,21 @@ def extract_role_id(role_mention):
     except ValueError:
         return None
 
+"""
+Function to bulk delete messages
+
+Args:
+    ctx: context variable which is passed to a command function
+    *messages: messages to delete
+    delay: seconds to delay the deletion process
+
+Returns:
+    None
+"""
+
+async def delete_messages(ctx:Context, *messages, delay=10):
+    await asyncio.sleep(delay)
+    await ctx.channel.delete_messages(iter(messages))
 
 """
 Function to send contribution embed as reply

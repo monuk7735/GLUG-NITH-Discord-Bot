@@ -2,11 +2,14 @@ import json
 from urllib.parse import uses_fragment
 
 import discord
+from discord import channel
+from discord.channel import TextChannel
 from discord.ext import commands
 from discord.ext.commands import Context
+from discord.message import Message
 
 import libs.config as config
-from libs.command_manager import custom_check, db_client, extract_member_id, extract_role_id
+from libs.command_manager import custom_check, db_client, extract_member_id, extract_role_id, delete_messages
 from cogs.help import extract_commands
 
 mod_roles = config.get_config("roles")["mod"]
@@ -220,6 +223,8 @@ class Moderation(commands.Cog, name=moderation_config["name"]):
     @custom_check(allowed_in_dm=False, req_roles=mod_roles)
     async def gen_react_role_msg(self, ctx: Context, uid):
 
+        old_msg = ctx.message.reference
+
         data = react_roles_collection.find_one({"uid": uid})
 
         data.pop("_id")
@@ -233,7 +238,8 @@ class Moderation(commands.Cog, name=moderation_config["name"]):
             return
 
         ctx.typing()
-        embed = discord.Embed(title=data.pop("title"), description="React to get role(s)")
+        embed = discord.Embed(title=data.pop("title"),
+                              description="React to get role(s)")
         emojis_to_react = []
 
         for emoji in data:
@@ -246,13 +252,24 @@ class Moderation(commands.Cog, name=moderation_config["name"]):
             emojis_to_react.append(emoji)
 
         embed.set_footer(text="From GLUG-NITH with \u2764!")
-        msg = await ctx.send(embed=embed)
+
+        if old_msg:
+            msg = await ctx.fetch_message(old_msg.message_id) 
+            await msg.edit(embed=embed)
+        else:
+            msg = await ctx.send(embed=embed)
 
         react_roles_collection.update_one(
             {"uid": uid}, {'$set': {"message": msg.id}})
 
+        for reaction in msg.reactions:
+            if str(reaction) not in emojis_to_react:
+                await msg.clear_reaction(reaction.emoji)
+
         for emoji in emojis_to_react:
             await msg.add_reaction(emoji)
+
+        await delete_messages(ctx, ctx.message, delay=5)
 
     @react_role.group(name="update")
     @custom_check(allowed_in_dm=False, req_roles=mod_roles)
@@ -279,7 +296,7 @@ class Moderation(commands.Cog, name=moderation_config["name"]):
         react_roles_collection.update_one(
             {"uid": uid}, {'$set': {'title': new_title}})
 
-        await ctx.send(f"**{uid}** updatedl: New title **{new_title}**")
+        await ctx.send(f"**{uid}** updated: New title **{new_title}**")
 
     @update_react_role.command(name="set", description=moderation_config["reactrole"]["update"]["set"]["description"], usage=moderation_config["reactrole"]["update"]["set"]["usage"])
     @custom_check(allowed_in_dm=False, req_roles=mod_roles)

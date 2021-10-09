@@ -112,7 +112,7 @@
           },
           "set": {
             "description": "Set an emoji-Role pair to reactrole category",
-            "usage": "{uid} {emoji} {@Role}"
+            "usage": "{uid} {emoji} {@Role} \"{description}\""
           },
           "remove": {
             "description": "Remove emoji from reactrole category",
