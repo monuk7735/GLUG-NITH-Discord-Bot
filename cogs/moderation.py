@@ -238,8 +238,7 @@ class Moderation(commands.Cog, name=moderation_config["name"]):
             return
 
         ctx.typing()
-        embed = discord.Embed(title=data.pop("title"),
-                              description="React to get role(s)")
+        embed = discord.Embed(title=data.pop("title"), description="React to get role(s)")
         emojis_to_react = []
 
         for emoji in data:
