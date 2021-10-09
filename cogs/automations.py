@@ -19,7 +19,14 @@ react_roles_collection = db_client.database.react_roles
 class Automate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.messages = {}
+        self.messages_counter = {}
         # self.change_on_call.start()
+    
+    @tasks.loop(seconds=5)
+    async def reset_counter(self):
+        self.messages = {}
+        self.messages_counter = {}
 
     # Welcome messages for new users
     @commands.Cog.listener()
@@ -30,7 +37,7 @@ class Automate(commands.Cog):
 
         dm_channel = await member.create_dm()
         # await dm_channel.send(f"Hi {member.mention}!\n\nWelcome to {member.guild.name}!")
-        # await dm_channel.send(f"```command prefix is nith\nreply with 'nith help' to know more ```")
+        # await dm_channel.send(f"```command prefix is glug\nreply with 'glug help' to know more ```")
 
     # Called When a Message is Pinned
     @commands.Cog.listener()
@@ -74,12 +81,12 @@ class Automate(commands.Cog):
 
         if not emoji in data:
             return
-            
+
         role_id = int(data[emoji].split("\n")[0])
         role = guild.get_role(role_id)
 
         print(f"Adding {role.name} to {member.name}")
-        await member.add_roles(role, reason=f"Reacted with {raw_reaction.emoji.name} to {data['uid']}")
+        await member.add_roles(role, reason=f"they reacted with {raw_reaction.emoji.name} to {data['uid']}")
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, raw_reaction: RawReactionActionEvent):
@@ -104,7 +111,24 @@ class Automate(commands.Cog):
         role = guild.get_role(role_id)
 
         print(f"Removing {role.name} from {member.name}")
-        await member.remove_roles(role, reason=f"Removed {raw_reaction.emoji.name} reaction from {data['uid']}")
+        await member.remove_roles(role, reason=f"they removed {raw_reaction.emoji.name} reaction from {data['uid']}")
+
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message):
+
+        if message.author.bot:
+            return
+
+        count = len(message.content)
+
+        if str(message.author.id) not in self.messages:
+            self.messages[str(message.author.id)] = message.content
+            return
+
+        if self.messages[str(message.author.id)] == message.content:
+            await message.channel.send("Spam Detected")
+        else:
+            self.messages[str(message.author.id)] = message.content
 
 
 def setup(bot):
